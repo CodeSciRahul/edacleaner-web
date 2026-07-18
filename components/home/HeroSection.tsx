@@ -1,7 +1,6 @@
 'use client'
 
 import type { MouseEvent } from 'react'
-import Link from 'next/link'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { ArrowRight, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -10,14 +9,17 @@ import { GradientBlob } from '@/components/common/GradientBlob'
 import { Particles } from '@/components/common/Particles'
 import { MacWindow } from '@/components/common/MacWindow'
 import { DashboardMock } from '@/components/common/DashboardMock'
+import { Magnetic } from '@/components/common/Magnetic'
 import { siteConfig } from '@/constants/site'
 import { heroFloatCards } from '@/constants/content'
 import { cn } from '@/lib/utils'
 import { getBoundingRect } from '@/lib/dom'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { useLenis } from '@/components/layout/SmoothScroll'
 
 export function HeroSection() {
   const reduced = useReducedMotion()
+  const { scrollTo } = useLenis()
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
   const springX = useSpring(mx, { stiffness: 80, damping: 20 })
@@ -86,17 +88,20 @@ export function HeroSection() {
             transition={{ duration: 0.55, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 flex flex-wrap items-center gap-3"
           >
-            <Button asChild variant="glow" size="xl" className="animate-glow-pulse">
-              <Link href="#download">
+            <Magnetic strength={0.35}>
+              <Button
+                variant="glow"
+                size="xl"
+                className="animate-glow-pulse"
+                onClick={() => scrollTo('#download')}
+              >
                 <Download strokeWidth={1.75} />
                 {siteConfig.download.label}
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="xl">
-              <Link href="#features">
-                View Features
-                <ArrowRight strokeWidth={1.75} />
-              </Link>
+              </Button>
+            </Magnetic>
+            <Button variant="outline" size="xl" onClick={() => scrollTo('#features')}>
+              View Features
+              <ArrowRight strokeWidth={1.75} />
             </Button>
           </motion.div>
 

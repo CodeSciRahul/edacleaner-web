@@ -126,7 +126,7 @@ const config: Config = {
         'gutter': 'var(--gutter)',
       },
       maxWidth: {
-        site: '1200px',
+        site: 'var(--site-max, 1200px)',
         narrow: '720px',
         prose: '640px',
       },

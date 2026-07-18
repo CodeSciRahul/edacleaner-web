@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { useIsMobile } from '@/hooks/use-media-query'
 
 interface ParticlesProps {
   className?: string
@@ -12,9 +13,11 @@ interface ParticlesProps {
 
 export function Particles({ className, count = 28 }: ParticlesProps) {
   const reduced = useReducedMotion()
+  const mobile = useIsMobile()
+  const total = mobile ? Math.min(12, count) : count
   const particles = useMemo(
     () =>
-      Array.from({ length: count }, (_, i) => ({
+      Array.from({ length: total }, (_, i) => ({
         id: i,
         left: `${(i * 37) % 100}%`,
         top: `${(i * 53) % 100}%`,
@@ -23,7 +26,7 @@ export function Particles({ className, count = 28 }: ParticlesProps) {
         duration: 8 + (i % 7),
         opacity: 0.15 + (i % 5) * 0.08,
       })),
-    [count],
+    [total],
   )
 
   if (reduced) return null

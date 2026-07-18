@@ -2,12 +2,18 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { Download } from 'lucide-react'
 import { SectionWrapper } from '@/components/common/SectionWrapper'
 import { SectionHeading } from '@/components/common/SectionHeading'
+import { Magnetic } from '@/components/common/Magnetic'
+import { Button } from '@/components/ui/button'
 import { comparisons } from '@/constants/content'
+import { useLenis } from '@/components/layout/SmoothScroll'
 import { cn } from '@/lib/utils'
 
 export function ComparisonSection() {
+  const { scrollTo } = useLenis()
+
   return (
     <SectionWrapper id="comparison">
       <SectionHeading
@@ -26,6 +32,15 @@ export function ComparisonSection() {
         {comparisons.map((row, i) => (
           <ComparisonRow key={row.label} row={row} delay={i * 0.08} />
         ))}
+
+        <div className="flex justify-center pt-4">
+          <Magnetic>
+            <Button variant="glow" size="lg" onClick={() => scrollTo('#download')}>
+              <Download strokeWidth={1.75} />
+              Get these results — Download Free
+            </Button>
+          </Magnetic>
+        </div>
       </div>
     </SectionWrapper>
   )

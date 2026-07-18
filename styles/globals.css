@@ -112,6 +112,21 @@
     }
   }
 
+  @media (min-width: 1536px) {
+    :root {
+      --gutter: 2.5rem;
+      --section-y: 8.5rem;
+      --section-y-lg: 11rem;
+      --site-max: 80rem;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    :root {
+      --site-max: 90rem;
+    }
+  }
+
   * {
     border-color: hsl(var(--border));
   }
@@ -200,6 +215,15 @@
   .text-pretty {
     text-wrap: pretty;
   }
+
+  .eda-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black, transparent);
+    animation: grid-drift 28s linear infinite;
+  }
 }
 
 @layer utilities {
@@ -241,6 +265,47 @@
     background: hsl(var(--muted-foreground) / 0.28);
     border-radius: 9999px;
   }
+}
+
+@property --gb-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes gb-spin {
+  to {
+    --gb-angle: 360deg;
+  }
+}
+
+@keyframes grid-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 64px 64px;
+  }
+}
+
+@keyframes eda-ripple {
+  to {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.eda-ripple {
+  position: absolute;
+  border-radius: 9999px;
+  background: hsl(0 0% 100% / 0.35);
+  pointer-events: none;
+  transform: scale(0);
+  animation: eda-ripple 0.55s ease-out forwards;
+}
+
+.dark .eda-ripple {
+  background: hsl(0 0% 100% / 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {

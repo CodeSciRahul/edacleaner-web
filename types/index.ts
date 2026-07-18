@@ -7,6 +7,7 @@ export type SectionId =
   | 'showcase'
   | 'features'
   | 'how-it-works'
+  | 'mid-cta'
   | 'comparison'
   | 'pricing'
   | 'testimonials'

@@ -1,19 +1,22 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Download } from 'lucide-react'
 import { SectionWrapper } from '@/components/common/SectionWrapper'
 import { GradientBlob } from '@/components/common/GradientBlob'
 import { Particles } from '@/components/common/Particles'
+import { Magnetic } from '@/components/common/Magnetic'
 import { Button } from '@/components/ui/button'
+import { useLenis } from '@/components/layout/SmoothScroll'
 import { siteConfig } from '@/constants/site'
 
 export function FinalCtaSection() {
+  const { scrollTo } = useLenis()
+
   return (
     <SectionWrapper id="cta" padding="lg" className="overflow-hidden" disableAnimation>
       <div className="relative overflow-hidden rounded-[1.75rem] border border-primary/25 bg-gradient-to-br from-card via-card to-primary/[0.12] px-6 py-16 text-center shadow-glow-lg sm:px-12 sm:py-20 lg:py-24">
-        <Particles count={36} className="opacity-80" />
+        <Particles count={28} className="opacity-70" />
         <GradientBlob className="-left-20 -top-24 opacity-80" tone="primary" size="xl" />
         <GradientBlob className="-bottom-24 -right-16 opacity-60" tone="cyan" size="lg" delay={1.5} />
         <GradientBlob className="left-1/3 top-1/2 opacity-40" tone="violet" size="md" delay={3} />
@@ -44,27 +47,23 @@ export function FinalCtaSection() {
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4">
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative"
-            >
-              <span
-                aria-hidden
-                className="absolute -inset-3 rounded-2xl bg-primary/30 blur-xl animate-glow-pulse"
-              />
-              <Button
-                asChild
-                variant="glow"
-                size="xl"
-                className="relative h-14 min-w-[240px] px-10 text-base shadow-glow-lg"
-              >
-                <Link href="#download">
+            <Magnetic strength={0.4}>
+              <div className="relative">
+                <span
+                  aria-hidden
+                  className="absolute -inset-3 rounded-2xl bg-primary/30 blur-xl animate-glow-pulse"
+                />
+                <Button
+                  variant="glow"
+                  size="xl"
+                  onClick={() => scrollTo('#download')}
+                  className="relative h-14 min-w-[240px] px-10 text-base shadow-glow-lg"
+                >
                   <Download strokeWidth={1.75} className="size-5" />
                   {siteConfig.download.label}
-                </Link>
-              </Button>
-            </motion.div>
+                </Button>
+              </div>
+            </Magnetic>
             <p className="text-xs text-muted-foreground">
               Free plan included · Windows, macOS & Linux · Cancel Pro anytime
             </p>
