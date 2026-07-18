@@ -1,0 +1,5 @@
+export { Providers } from '@/components/layout/Providers'
+export { ThemeProvider, useThemeTransition } from '@/components/layout/ThemeProvider'
+export { SmoothScroll } from '@/components/layout/SmoothScroll'
+export { Header } from '@/components/layout/Header'
+export { Footer } from '@/components/layout/Footer'
