@@ -6,7 +6,6 @@ import {
   BadgeCheck,
   BarChart3,
   Brush,
-  CheckCircle2,
   Copy,
   Cpu,
   FileSearch,
@@ -38,92 +37,145 @@ export const heroFloatCards = [
   { label: 'Health Score', value: '94', icon: Shield, tone: 'violet' as const },
 ]
 
+export type FeatureCategory = 'cleanup' | 'storage' | 'performance' | 'insights'
+
 export type FeatureItem = {
+  id: string
   title: string
   description: string
   icon: LucideIcon
+  category: FeatureCategory
+  highlight?: string
 }
 
-/** Features that exist in the EdaCleaner desktop app */
+export const featureCategories: {
+  id: FeatureCategory | 'all'
+  label: string
+}[] = [
+  { id: 'all', label: 'All' },
+  { id: 'cleanup', label: 'Cleanup' },
+  { id: 'storage', label: 'Storage' },
+  { id: 'performance', label: 'Performance' },
+  { id: 'insights', label: 'Insights' },
+]
+
+/** Features that ship in the EdaCleaner desktop app (reachable UI only) */
 export const features: FeatureItem[] = [
   {
-    title: 'One-Click Smart Scan',
+    id: 'smart-scan',
+    title: 'Smart Scan',
     description:
-      'Run a full health check across cleanup, storage, performance, and security guidance in one click.',
+      'One-click health check across cleanup, storage, and performance — with a clear health score and reclaimable space.',
     icon: ScanSearch,
+    category: 'insights',
+    highlight: 'Health score in seconds',
   },
   {
-    title: 'Junk Cleaner',
+    id: 'junk',
+    title: 'Junk Files',
     description:
       'Remove leftover installers, crash dumps, and app debris without touching your personal files.',
     icon: Trash2,
+    category: 'cleanup',
+    highlight: 'Safe by default',
   },
   {
+    id: 'temp',
     title: 'Temporary Files',
-    description: 'Clear OS and application temp folders that quietly eat disk space over time.',
+    description: 'Clear OS and application temporary folders that quietly eat disk space over time.',
     icon: Brush,
+    category: 'cleanup',
+    highlight: 'Instant reclaim',
   },
   {
-    title: 'Browser Cleaner',
-    description: 'Free space from Chrome, Edge, Firefox, and Safari caches in a single pass.',
-    icon: AppWindow,
-  },
-  {
-    title: 'System Cache Cleaner',
-    description: 'Clean thumbnail caches, update downloads, and system network caches safely.',
-    icon: Layers,
-  },
-  {
-    title: 'Recycle Bin Cleaner',
+    id: 'recycle',
+    title: 'Recycle Bin',
     description: 'Permanently empty Trash / Recycle Bin when you are ready to reclaim space.',
     icon: Archive,
+    category: 'cleanup',
+    highlight: 'Empty when ready',
   },
   {
-    title: 'Duplicate File Finder',
-    description: 'Find identical copies across your drives and keep only what you need.',
-    icon: Copy,
+    id: 'browser',
+    title: 'Browser Cache',
+    description: 'Free space from Chrome, Edge, Firefox, and Safari cached data in a single pass.',
+    icon: AppWindow,
+    category: 'cleanup',
+    highlight: 'Multi-browser',
   },
   {
-    title: 'Large File Analyzer',
+    id: 'system-cache',
+    title: 'System Cache',
+    description: 'Clean thumbnail caches, update downloads, and system network caches safely.',
+    icon: Layers,
+    category: 'cleanup',
+    highlight: 'System caches',
+  },
+  {
+    id: 'disk',
+    title: 'Storage Overview',
+    description: 'See drive capacity, used space, and folder breakdowns with clear storage health.',
+    icon: HardDrive,
+    category: 'storage',
+    highlight: 'Disk analysis',
+  },
+  {
+    id: 'large-files',
+    title: 'Large Files',
     description: 'Surface files over 100 MB, sort by size, and reclaim space with precision.',
     icon: FileSearch,
+    category: 'storage',
+    highlight: '100 MB+',
   },
   {
-    title: 'Disk Usage Analyzer',
-    description: 'See capacity, used space, and folder breakdowns with clear storage health.',
-    icon: HardDrive,
+    id: 'duplicates',
+    title: 'Duplicate Files',
+    description: 'Find identical copies across your drives and keep only what you need.',
+    icon: Copy,
+    category: 'storage',
+    highlight: 'Keep or delete',
   },
   {
-    title: 'Startup Manager',
-    description: 'Disable heavy startup apps and cut boot impact with impact-sorted controls.',
-    icon: Rocket,
-  },
-  {
-    title: 'Performance Booster',
+    id: 'boost',
+    title: 'Performance Boost',
     description:
       'Boost Now clears reclaimable clutter, flushes DNS, and frees resources in one action.',
     icon: Zap,
+    category: 'performance',
+    highlight: 'Boost Now',
   },
   {
-    title: 'Memory Optimizer',
-    description: 'Recover RAM by managing background processes and reclaiming idle memory.',
-    icon: MemoryStick,
+    id: 'startup',
+    title: 'Startup Apps',
+    description: 'Enable or disable apps that launch at sign-in and cut unnecessary boot load.',
+    icon: Rocket,
+    category: 'performance',
+    highlight: 'Faster boot',
   },
   {
+    id: 'background',
     title: 'Background Apps',
     description: 'See live CPU and memory use, then stop safe processes that slow you down.',
     icon: Cpu,
+    category: 'performance',
+    highlight: 'Live process list',
   },
   {
-    title: 'Real-time Monitoring',
+    id: 'monitoring',
+    title: 'Monitoring',
     description: 'Watch live CPU and memory graphs with Normal, Warning, and Critical levels.',
     icon: Activity,
+    category: 'insights',
+    highlight: 'Live graphs',
   },
   {
-    title: 'System Health Reports',
+    id: 'reports',
+    title: 'Reports',
     description:
       'Track lifetime space reclaimed, issues resolved, boosts, and 7-day optimization trends.',
     icon: BarChart3,
+    category: 'insights',
+    highlight: 'Lifetime insights',
   },
 ]
 
@@ -220,7 +272,15 @@ export const pricingPlans: PricingPlan[] = [
     description: 'Essential cleanup to keep everyday PCs healthy.',
     cta: 'Download Free',
     href: '#download',
-    features: ['Smart Scan', 'Junk Cleaner', 'Basic Privacy'],
+    features: [
+      'Smart Scan',
+      'Junk Files',
+      'Temporary Files',
+      'Recycle Bin',
+      'Browser Cache',
+      'System Cache',
+      'Monitoring',
+    ],
   },
   {
     id: 'pro',
@@ -234,12 +294,13 @@ export const pricingPlans: PricingPlan[] = [
     badge: 'Most Popular',
     features: [
       'Everything in Free',
-      'Startup Manager',
-      'Duplicate Finder',
-      'Registry Cleaner',
-      'Real-Time Monitoring',
-      'Large File Analyzer',
-      'Automatic Cleaning',
+      'Storage Overview',
+      'Large Files',
+      'Duplicate Files',
+      'Performance Boost',
+      'Startup Apps',
+      'Background Apps',
+      'Reports',
       'Priority Support',
     ],
   },
@@ -248,39 +309,39 @@ export const pricingPlans: PricingPlan[] = [
     name: 'Business',
     price: '$79',
     period: 'per year',
-    description: 'Multi-PC management with commercial licensing for teams.',
+    description: 'Multi-PC licensing with priority support for teams.',
     cta: 'Contact Sales',
     href: 'mailto:sales@edacleaner.com',
     features: [
       'Everything in Pro',
-      'Multi-PC Management',
-      'Team Dashboard',
-      'Centralized Reports',
+      'Up to 5 device licenses',
       'Commercial License',
-      'Premium Support',
-      'Remote Monitoring',
+      'Centralized Reports export',
+      'Priority email support',
+      'Team onboarding help',
     ],
   },
 ]
 
-/** Full feature matrix for the pricing comparison table */
+/** Full feature matrix for the pricing comparison table — product features only */
 export const pricingComparison = [
   { feature: 'Smart Scan', free: true, pro: true, business: true },
-  { feature: 'Junk Cleaner', free: true, pro: true, business: true },
-  { feature: 'Basic Privacy', free: true, pro: true, business: true },
-  { feature: 'Startup Manager', free: false, pro: true, business: true },
-  { feature: 'Duplicate Finder', free: false, pro: true, business: true },
-  { feature: 'Registry Cleaner', free: false, pro: true, business: true },
-  { feature: 'Real-Time Monitoring', free: false, pro: true, business: true },
-  { feature: 'Large File Analyzer', free: false, pro: true, business: true },
-  { feature: 'Automatic Cleaning', free: false, pro: true, business: true },
+  { feature: 'Junk Files', free: true, pro: true, business: true },
+  { feature: 'Temporary Files', free: true, pro: true, business: true },
+  { feature: 'Recycle Bin', free: true, pro: true, business: true },
+  { feature: 'Browser Cache', free: true, pro: true, business: true },
+  { feature: 'System Cache', free: true, pro: true, business: true },
+  { feature: 'Monitoring', free: true, pro: true, business: true },
+  { feature: 'Storage Overview', free: false, pro: true, business: true },
+  { feature: 'Large Files', free: false, pro: true, business: true },
+  { feature: 'Duplicate Files', free: false, pro: true, business: true },
+  { feature: 'Performance Boost', free: false, pro: true, business: true },
+  { feature: 'Startup Apps', free: false, pro: true, business: true },
+  { feature: 'Background Apps', free: false, pro: true, business: true },
+  { feature: 'Reports', free: false, pro: true, business: true },
   { feature: 'Priority Support', free: false, pro: true, business: true },
-  { feature: 'Multi-PC Management', free: false, pro: false, business: true },
-  { feature: 'Team Dashboard', free: false, pro: false, business: true },
-  { feature: 'Centralized Reports', free: false, pro: false, business: true },
+  { feature: 'Multi-device License', free: false, pro: false, business: true },
   { feature: 'Commercial License', free: false, pro: false, business: true },
-  { feature: 'Premium Support', free: false, pro: false, business: true },
-  { feature: 'Remote Monitoring', free: false, pro: false, business: true },
 ] as const
 
 export const testimonials = [
@@ -392,7 +453,7 @@ export const faqs = [
   {
     question: 'Is it free?',
     answer:
-      'Yes. EdaCleaner Free includes Smart Scan, Junk Cleaner, and basic privacy cleanup at no cost. Upgrade to Pro anytime for advanced tools like Startup Manager, Duplicate Finder, and Automatic Cleaning.',
+      'Yes. EdaCleaner Free includes Smart Scan, Junk Files, Temporary Files, Recycle Bin, Browser Cache, System Cache, and Monitoring at no cost. Upgrade to Pro for Storage tools, Performance Boost, Startup Apps, Background Apps, and Reports.',
   },
   {
     question: 'Does it support Windows 11?',
@@ -412,12 +473,12 @@ export const faqs = [
   {
     question: 'How often should I clean my PC?',
     answer:
-      'Most people run Smart Scan weekly or after big installs and downloads. Pro’s Automatic Cleaning can handle routine junk on a schedule so you stay ahead without thinking about it.',
+      'Most people run Smart Scan weekly or after big installs and downloads. Cleanup and Performance Boost are available whenever your PC starts to feel slow or storage runs low.',
   },
   {
     question: 'Is EdaCleaner safe for work computers?',
     answer:
-      'Yes. Business plans include a commercial license, centralized reports, and multi-PC management designed for teams and IT administrators.',
+      'Yes. Business plans include a commercial license and multi-device options designed for teams and IT administrators. Cleanup uses Safe and Review risk badges before you remove anything.',
   },
 ]
 
@@ -454,8 +515,8 @@ export const dashboardScreens = [
   },
   {
     id: 'cleanup',
-    title: 'Junk & Browser Cleaner',
-    description: 'Safe categories for temps, caches, and recycle bin.',
+    title: 'Cleanup',
+    description: 'Safe categories for junk, temps, caches, and recycle bin.',
     hotspot: { x: 30, y: 52, label: 'Safe cleanup categories' },
   },
   {
