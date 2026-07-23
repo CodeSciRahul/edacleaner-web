@@ -545,8 +545,8 @@ export const downloads = [
   {
     id: 'linux',
     name: 'Linux',
-    requirement: 'Ubuntu 22.04+ · AppImage',
+    requirement: 'Ubuntu 22.04+ · x64',
     href: '#',
-    file: 'EdaCleaner.AppImage',
+    file: 'EdaCleaner-linux-x64.zip',
   },
 ] as const
