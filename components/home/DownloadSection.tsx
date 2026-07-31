@@ -7,7 +7,7 @@ import { SectionWrapper } from '@/components/common/SectionWrapper'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { MotionItem, MotionStagger } from '@/components/common/Motion'
 import { Button } from '@/components/ui/button'
-import { downloads } from '@/constants/content'
+import { downloads, linuxDownloadFormats } from '@/constants/content'
 import { cn } from '@/lib/utils'
 import {
   fetchDownloadUrl,
@@ -28,8 +28,14 @@ function PlatformIcon({ id }: { id: string }) {
 function pickFileForPlatform(
   files: LatestVersionFile[],
   platform: ReleasePlatform,
+  installerType?: string,
 ): LatestVersionFile | undefined {
-  const matches = files.filter((file) => file.platform === platform)
+  let matches = files.filter((file) => file.platform === platform)
+  if (installerType) {
+    matches = matches.filter(
+      (file) => file.installerType.toLowerCase() === installerType.toLowerCase(),
+    )
+  }
   if (matches.length === 0) return undefined
 
   return (
@@ -47,11 +53,13 @@ function detectPreferredPlatform(): ReleasePlatform {
   return 'windows'
 }
 
+type DownloadKey = string
+
 export function DownloadSection() {
   const [latest, setLatest] = useState<LatestVersion | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loadingLatest, setLoadingLatest] = useState(true)
-  const [downloadingId, setDownloadingId] = useState<string | null>(null)
+  const [downloadingId, setDownloadingId] = useState<DownloadKey | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
   const [preferredPlatform, setPreferredPlatform] = useState<ReleasePlatform>('windows')
   const [, startTransition] = useTransition()
@@ -85,6 +93,17 @@ export function DownloadSection() {
     return downloads.map((item) => {
       const platform = item.id as ReleasePlatform
       const releaseFile = latest ? pickFileForPlatform(latest.files, platform) : undefined
+
+      const linuxFormats =
+        platform === 'linux'
+          ? linuxDownloadFormats.map((format) => {
+              const file = latest
+                ? pickFileForPlatform(latest.files, 'linux', format.installerType)
+                : undefined
+              return { ...format, releaseFile: file }
+            })
+          : null
+
       return {
         id: item.id,
         name: item.name,
@@ -92,19 +111,28 @@ export function DownloadSection() {
         placeholderFile: item.file,
         platform,
         releaseFile,
+        linuxFormats,
       }
     })
   }, [latest])
 
   const handleDownload = useCallback(
-    async (platform: ReleasePlatform, architecture?: ReleaseArchitecture) => {
+    async (
+      platform: ReleasePlatform,
+      options?: { architecture?: ReleaseArchitecture; installerType?: string },
+    ) => {
+      const key = options?.installerType
+        ? `${platform}:${options.installerType}`
+        : platform
+
       setActionError(null)
-      setDownloadingId(platform)
+      setDownloadingId(key)
 
       try {
         const payload = await fetchDownloadUrl({
           platform,
-          ...(architecture ? { architecture } : {}),
+          ...(options?.architecture ? { architecture: options.architecture } : {}),
+          ...(options?.installerType ? { installerType: options.installerType } : {}),
         })
 
         const anchor = document.createElement('a')
@@ -168,9 +196,11 @@ export function DownloadSection() {
 
       <MotionStagger className="mx-auto grid max-w-4xl gap-4 md:grid-cols-3">
         {cards.map((item, i) => {
-          const available = Boolean(item.releaseFile)
+          const available = item.linuxFormats
+            ? item.linuxFormats.some((f) => Boolean(f.releaseFile))
+            : Boolean(item.releaseFile)
           const isPreferred = item.platform === preferredPlatform
-          const busy = downloadingId === item.platform
+          const busyPlatform = downloadingId?.startsWith(`${item.platform}`)
           const label = item.releaseFile
             ? `${item.releaseFile.fileName ?? item.placeholderFile}${
                 item.releaseFile.fileSize
@@ -194,25 +224,86 @@ export function DownloadSection() {
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">{item.name}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{item.requirement}</p>
-                <p className="mt-3 text-xs text-muted-foreground/80">{label}</p>
 
-                <Button
-                  variant={available && isPreferred ? 'glow' : 'outline'}
-                  className="mt-6 w-full"
-                  size="lg"
-                  disabled={!available || busy || loadingLatest}
-                  onClick={() => {
-                    if (!item.releaseFile) return
-                    void handleDownload(item.platform, item.releaseFile.architecture)
-                  }}
-                >
-                  {busy ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : (
-                    <Download strokeWidth={1.75} />
-                  )}
-                  {busy ? 'Preparing…' : available ? 'Download' : 'Coming soon'}
-                </Button>
+                {item.linuxFormats ? (
+                  <>
+                    <p className="mt-3 text-xs text-muted-foreground/80">
+                      Choose your package format — .deb recommended for Ubuntu/Debian.
+                    </p>
+                    <div className="mt-6 flex flex-col gap-2">
+                      {item.linuxFormats.map((format) => {
+                        const formatAvailable = Boolean(format.releaseFile)
+                        const key = `linux:${format.installerType}`
+                        const busy = downloadingId === key
+                        const sizeLabel = format.releaseFile?.fileSize
+                          ? ` · ${formatBytes(format.releaseFile.fileSize)}`
+                          : ''
+
+                        return (
+                          <Button
+                            key={format.installerType}
+                            variant={
+                              formatAvailable && format.installerType === 'deb' && isPreferred
+                                ? 'glow'
+                                : 'outline'
+                            }
+                            className="w-full justify-between"
+                            size="lg"
+                            disabled={!formatAvailable || Boolean(busyPlatform) || loadingLatest}
+                            onClick={() => {
+                              if (!format.releaseFile) return
+                              void handleDownload('linux', {
+                                architecture: format.releaseFile.architecture,
+                                installerType: format.installerType,
+                              })
+                            }}
+                          >
+                            <span className="flex items-center gap-2">
+                              {busy ? (
+                                <Loader2 className="size-4 animate-spin" />
+                              ) : (
+                                <Download strokeWidth={1.75} />
+                              )}
+                              {busy ? 'Preparing…' : format.label}
+                            </span>
+                            <span className="text-xs font-normal text-muted-foreground">
+                              {formatAvailable
+                                ? `${format.hint}${sizeLabel}`
+                                : `${format.hint} · Soon`}
+                            </span>
+                          </Button>
+                        )
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="mt-3 text-xs text-muted-foreground/80">{label}</p>
+                    <Button
+                      variant={available && isPreferred ? 'glow' : 'outline'}
+                      className="mt-6 w-full"
+                      size="lg"
+                      disabled={!available || Boolean(busyPlatform) || loadingLatest}
+                      onClick={() => {
+                        if (!item.releaseFile) return
+                        void handleDownload(item.platform, {
+                          architecture: item.releaseFile.architecture,
+                        })
+                      }}
+                    >
+                      {downloadingId === item.platform ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <Download strokeWidth={1.75} />
+                      )}
+                      {downloadingId === item.platform
+                        ? 'Preparing…'
+                        : available
+                          ? 'Download'
+                          : 'Coming soon'}
+                    </Button>
+                  </>
+                )}
               </motion.div>
             </MotionItem>
           )
