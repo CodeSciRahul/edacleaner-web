@@ -545,8 +545,30 @@ export const downloads = [
   {
     id: 'linux',
     name: 'Linux',
-    requirement: 'Ubuntu 22.04+ · x64',
+    requirement: 'Ubuntu, Debian, Fedora & more · x64',
     href: '#',
-    file: 'EdaCleaner-linux-x64.zip',
+    file: 'EdaCleaner.deb',
+  },
+] as const
+
+/** Linux installer formats shown on the download section (order = UI priority). */
+export const linuxDownloadFormats = [
+  {
+    installerType: 'deb',
+    label: '.deb',
+    hint: 'Ubuntu / Debian',
+    file: 'EdaCleaner-linux-x64.deb',
+  },
+  {
+    installerType: 'rpm',
+    label: '.rpm',
+    hint: 'Fedora / RHEL',
+    file: 'EdaCleaner-linux-x64.rpm',
+  },
+  {
+    installerType: 'appimage',
+    label: 'AppImage',
+    hint: 'Portable',
+    file: 'EdaCleaner-linux-x64.AppImage',
   },
 ] as const

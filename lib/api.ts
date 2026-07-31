@@ -67,9 +67,11 @@ export function fetchLatestVersion(): Promise<LatestVersion> {
 export function fetchDownloadUrl(input: {
   platform: ReleasePlatform
   architecture?: ReleaseArchitecture
+  installerType?: string
 }): Promise<DownloadPayload> {
   const params = new URLSearchParams({ platform: input.platform })
   if (input.architecture) params.set('architecture', input.architecture)
+  if (input.installerType) params.set('installerType', input.installerType)
   return apiGet<DownloadPayload>(`/versions/latest/download?${params.toString()}`)
 }
 
