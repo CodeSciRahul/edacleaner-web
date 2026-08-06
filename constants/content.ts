@@ -248,18 +248,26 @@ export const comparisons = [
   },
 ]
 
-export type PlanId = 'free' | 'pro' | 'business'
+export type PlanId = 'free' | 'pro' | 'premium'
 
 export type PricingPlan = {
   id: PlanId
   name: string
-  price: string
-  period: string
   description: string
   cta: string
   href: string
   highlighted?: boolean
   badge?: string
+  /** Annual price in USD (billed yearly) */
+  yearlyPrice: number
+  /** Full annual price if billed monthly (for strikethrough) */
+  yearlyOriginal?: number
+  /** Monthly price in USD (billed monthly) */
+  monthlyPrice: number
+  /** Free forever — no billing cycle */
+  forever?: boolean
+  /** Paid plans include a free trial */
+  freeTrialDays?: number
   features: string[]
 }
 
@@ -267,81 +275,77 @@ export const pricingPlans: PricingPlan[] = [
   {
     id: 'free',
     name: 'Free',
-    price: '$0',
-    period: 'forever',
+    yearlyPrice: 0,
+    monthlyPrice: 0,
+    forever: true,
     description: 'Essential cleanup to keep everyday PCs healthy.',
     cta: 'Download Free',
     href: '#download',
     features: [
-      'Smart Scan',
-      'Junk Files',
-      'Temporary Files',
-      'Recycle Bin',
-      'Browser Cache',
-      'System Cache',
-      'Monitoring',
+      'Smart Scan to find junk fast',
+      'One-click Cleanup',
+      'Junk file removal',
+      'Browser cache cleaning',
+      'System cache cleaning',
     ],
   },
   {
     id: 'pro',
     name: 'Pro',
-    price: '$29',
-    period: 'per year',
+    yearlyPrice: 29,
+    yearlyOriginal: 36,
+    monthlyPrice: 3,
+    freeTrialDays: 7,
     description: 'Full optimizer toolkit for power users who want maximum speed.',
-    cta: 'Buy Pro',
+    cta: 'Start 7-day free trial',
     href: '#download',
     highlighted: true,
     badge: 'Most Popular',
     features: [
       'Everything in Free',
-      'Storage Overview',
-      'Large Files',
-      'Duplicate Files',
-      'Performance Boost',
-      'Startup Apps',
-      'Background Apps',
-      'Reports',
-      'Priority Support',
+      'Storage overview dashboard',
+      'Large file finder',
+      'Duplicate file cleaner',
+      'Temporary file removal',
     ],
   },
   {
-    id: 'business',
-    name: 'Business',
-    price: '$79',
-    period: 'per year',
-    description: 'Multi-PC licensing with priority support for teams.',
-    cta: 'Contact Sales',
-    href: 'mailto:sales@edacleaner.com',
+    id: 'premium',
+    name: 'Premium',
+    yearlyPrice: 59,
+    monthlyPrice: 5,
+    freeTrialDays: 7,
+    description: 'Advanced toolkit with performance and monitoring features.',
+    cta: 'Start 7-day free trial',
+    href: '#download',
     features: [
       'Everything in Pro',
-      'Up to 5 device licenses',
-      'Commercial License',
-      'Centralized Reports export',
-      'Priority email support',
-      'Team onboarding help',
+      'Performance Boost',
+      'Startup app manager',
+      'Background app control',
+      'Cleanup reports',
+      'Live system monitor',
     ],
   },
 ]
 
 /** Full feature matrix for the pricing comparison table — product features only */
 export const pricingComparison = [
-  { feature: 'Smart Scan', free: true, pro: true, business: true },
-  { feature: 'Junk Files', free: true, pro: true, business: true },
-  { feature: 'Temporary Files', free: true, pro: true, business: true },
-  { feature: 'Recycle Bin', free: true, pro: true, business: true },
-  { feature: 'Browser Cache', free: true, pro: true, business: true },
-  { feature: 'System Cache', free: true, pro: true, business: true },
-  { feature: 'Monitoring', free: true, pro: true, business: true },
-  { feature: 'Storage Overview', free: false, pro: true, business: true },
-  { feature: 'Large Files', free: false, pro: true, business: true },
-  { feature: 'Duplicate Files', free: false, pro: true, business: true },
-  { feature: 'Performance Boost', free: false, pro: true, business: true },
-  { feature: 'Startup Apps', free: false, pro: true, business: true },
-  { feature: 'Background Apps', free: false, pro: true, business: true },
-  { feature: 'Reports', free: false, pro: true, business: true },
-  { feature: 'Priority Support', free: false, pro: true, business: true },
-  { feature: 'Multi-device License', free: false, pro: false, business: true },
-  { feature: 'Commercial License', free: false, pro: false, business: true },
+  { feature: 'Smart Scan', free: true, pro: true, premium: true },
+  { feature: 'Cleanup', free: true, pro: true, premium: true },
+  { feature: 'Junk Files', free: true, pro: true, premium: true },
+  { feature: 'Browser Cache', free: true, pro: true, premium: true },
+  { feature: 'System Cache', free: true, pro: true, premium: true },
+  { feature: 'Storage Overview', free: false, pro: true, premium: true },
+  { feature: 'Large Files', free: false, pro: true, premium: true },
+  { feature: 'Duplicate Files', free: false, pro: true, premium: true },
+  { feature: 'Temporary Files', free: false, pro: true, premium: true },
+  { feature: 'Performance Boost', free: false, pro: false, premium: true },
+  { feature: 'Startup Apps', free: false, pro: false, premium: true },
+  { feature: 'Background Apps', free: false, pro: false, premium: true },
+  { feature: 'Reports', free: false, pro: false, premium: true },
+  { feature: 'Monitor', free: false, pro: false, premium: true },
+  { feature: '7-day free trial', free: false, pro: true, premium: true },
 ] as const
 
 export const testimonials = [
@@ -453,7 +457,7 @@ export const faqs = [
   {
     question: 'Is it free?',
     answer:
-      'Yes. EdaCleaner Free includes Smart Scan, Junk Files, Temporary Files, Recycle Bin, Browser Cache, System Cache, and Monitoring at no cost. Upgrade to Pro for Storage tools, Performance Boost, Startup Apps, Background Apps, and Reports.',
+      'Yes. EdaCleaner Free includes Smart Scan, Cleanup, Junk Files, Browser Cache, and System Cache at no cost. Upgrade to Pro for storage tools, or Premium for Performance Boost, Startup Apps, Background Apps, Reports, and Monitor. Paid plans include a 7-day free trial.',
   },
   {
     question: 'Does it support Windows 11?',
@@ -466,9 +470,9 @@ export const faqs = [
       'No. Cleanup targets junk, temps, caches, and optional categories you choose. Personal documents, photos, and projects are left alone, and you confirm before anything is removed.',
   },
   {
-    question: 'Can I cancel Pro?',
+    question: 'Can I cancel Pro or Premium?',
     answer:
-      'Yes. You can cancel Pro anytime before renewal. You keep Pro features until the end of your billing period, and Free features remain available after that.',
+      'Yes. You can cancel anytime before renewal. You keep paid features until the end of your billing period, and Free features remain available after that. Both Pro and Premium include a 7-day free trial.',
   },
   {
     question: 'How often should I clean my PC?',
@@ -478,7 +482,7 @@ export const faqs = [
   {
     question: 'Is EdaCleaner safe for work computers?',
     answer:
-      'Yes. Business plans include a commercial license and multi-device options designed for teams and IT administrators. Cleanup uses Safe and Review risk badges before you remove anything.',
+      'Yes. Cleanup uses Safe and Review risk badges before you remove anything, so personal documents and work files stay protected. Premium adds monitoring and reports useful for keeping office PCs healthy.',
   },
 ]
 
