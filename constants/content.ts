@@ -292,7 +292,7 @@ export const pricingPlans: PricingPlan[] = [
   {
     id: 'pro',
     name: 'Pro',
-    yearlyPrice: 39,
+    yearlyPrice: 29,
     monthlyPrice: 3,
     freeTrialDays: 7,
     description: 'Full optimizer toolkit for power users who want maximum speed.',
@@ -312,7 +312,7 @@ export const pricingPlans: PricingPlan[] = [
     id: 'premium',
     name: 'Premium',
     yearlyPrice: 59,
-    monthlyPrice: 5,
+    monthlyPrice: 6,
     freeTrialDays: 7,
     description: 'Advanced toolkit with performance and monitoring features.',
     cta: 'Start 7-day free trial',
