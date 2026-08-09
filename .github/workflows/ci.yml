@@ -62,8 +62,17 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
             cd ~/edaCleaner/edacleaner-web
-            git pull origin main
+            echo "Deploy cwd: $(pwd)"
+            git fetch origin main
+            git reset --hard origin/main
+            echo "Deployed commit: $(git log -1 --oneline)"
             npm ci
-            npm run build
-            pm2 restart edaCleanerWeb
+            rm -rf .next
+            NEXT_TELEMETRY_DISABLED=1 npm run build
+            # Restart from this folder so PM2 serves the build we just created
+            pm2 delete edaCleanerWeb || true
+            pm2 start npm --name edaCleanerWeb -- start
+            pm2 save
+            pm2 show edaCleanerWeb | grep -E "exec cwd|status|script path" || true
