@@ -11,6 +11,12 @@ export const siteConfig = {
     label: 'Download for Windows',
     secondaryLabel: 'Free download',
   },
+  /** Custom scheme registered by the EDA Cleaner desktop app. */
+  desktopDeepLink: {
+    protocol: 'edacleaner',
+    checkoutSuccess: 'edacleaner://checkout/success',
+    checkoutCancel: 'edacleaner://checkout/cancel',
+  },
   social: {
     twitter: '',
     github: '',
