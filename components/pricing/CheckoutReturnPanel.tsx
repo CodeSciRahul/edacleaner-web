@@ -111,7 +111,7 @@ export function CheckoutReturnPanel(): React.ReactElement {
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
           {isSuccess
-            ? 'Your subscription is activating. Opening EDA Cleaner so your plan unlocks on this device.'
+            ? 'Your subscription is activating. Open EDA Cleaner and log in with the same checkout email. We send a one-time code if you have not set a password yet.'
             : 'No charge was made. You can reopen the desktop app and try again whenever you are ready.'}
         </p>
       </div>
@@ -122,8 +122,8 @@ export function CheckoutReturnPanel(): React.ReactElement {
           <p className="text-xs leading-relaxed text-muted-foreground">
             {isSuccess
               ? launchAttempted
-                ? 'If the app did not open automatically, click the button below. Keep EDA Cleaner installed and signed in on this PC.'
-                : 'We are launching the desktop app to refresh your plan entitlements…'
+                ? 'If the app did not open automatically, click the button below. Log in with your checkout email and enter the email code so the paid plan unlocks on this PC.'
+                : 'We are launching the desktop app. After it opens, log in with your checkout email if you purchased a plan without a password…'
               : 'Return to EDA Cleaner to stay on Free, or pick another plan later.'}
           </p>
         </div>
