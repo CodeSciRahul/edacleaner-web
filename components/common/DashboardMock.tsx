@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 type ScreenId =
@@ -18,6 +19,16 @@ interface DashboardMockProps {
 
 /** CSS product UI mock matching EdaCleaner desktop chrome */
 export function DashboardMock({ screen, className }: DashboardMockProps) {
+  const { t } = useTranslation()
+  const navItems = [
+    t('mock.nav.overview'),
+    t('mock.nav.smartScan'),
+    t('mock.nav.cleanup'),
+    t('mock.nav.storage'),
+    t('mock.nav.performance'),
+    t('mock.nav.monitoring'),
+  ]
+
   return (
     <div
       className={cn(
@@ -34,8 +45,7 @@ export function DashboardMock({ screen, className }: DashboardMockProps) {
             </span>
             <span className="text-[11px] font-semibold">EDA Cleaner</span>
           </div>
-          {['Overview', 'Smart Scan', 'Cleanup', 'Storage', 'Performance', 'Monitoring'].map(
-            (item, i) => (
+          {navItems.map((item, i) => (
               <div
                 key={item}
                 className={cn(
@@ -47,8 +57,7 @@ export function DashboardMock({ screen, className }: DashboardMockProps) {
               >
                 {item}
               </div>
-            ),
-          )}
+            ))}
         </aside>
 
         {/* Main */}
@@ -134,14 +143,19 @@ function Metric({
 }
 
 function OverviewScreen() {
+  const { t } = useTranslation()
   return (
     <div className="space-y-3">
       <div className="rounded-2xl border border-border/70 bg-card/90 p-4 shadow-card">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-[10px] font-medium text-muted-foreground">System status</p>
-            <p className="mt-1 text-sm font-semibold">Your PC is in great shape</p>
-            <p className="mt-1 text-[10px] text-muted-foreground">12.4 GB reclaimed lifetime</p>
+            <p className="text-[10px] font-medium text-muted-foreground">
+              {t('mock.systemStatus')}
+            </p>
+            <p className="mt-1 text-sm font-semibold">{t('mock.pcGreatShape')}</p>
+            <p className="mt-1 text-[10px] text-muted-foreground">
+              {t('mock.reclaimedLifetime')}
+            </p>
           </div>
           <div className="flex size-14 items-center justify-center rounded-full border-4 border-primary/20 bg-primary/10">
             <span className="text-lg font-bold text-primary">94</span>
@@ -149,38 +163,39 @@ function OverviewScreen() {
         </div>
         <div className="mt-3 flex gap-2">
           <span className="rounded-lg bg-primary px-3 py-1.5 text-[10px] font-medium text-primary-foreground">
-            Smart Scan
+            {t('mock.smartScan')}
           </span>
           <span className="rounded-lg border border-border px-3 py-1.5 text-[10px] font-medium">
-            Clean Now
+            {t('mock.optimize')}
           </span>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2">
-        <Metric label="CPU" value="24%" />
-        <Metric label="RAM free" value="8.2 GB" tone="cyan" />
-        <Metric label="Disk free" value="186 GB" tone="success" />
+        <Metric label={t('mock.cpu')} value="24%" />
+        <Metric label={t('mock.ramFree')} value="8.2 GB" tone="cyan" />
+        <Metric label={t('mock.diskFree')} value="186 GB" tone="success" />
       </div>
     </div>
   )
 }
 
 function SmartScanScreen() {
+  const { t } = useTranslation()
   const areas = [
-    { name: 'Cleanup', detail: '4.8 GB reclaimable' },
-    { name: 'Storage', detail: '128 duplicates' },
-    { name: 'Performance', detail: '9 high-impact apps' },
-    { name: 'Security', detail: 'All clear' },
+    { name: t('mock.area.cleanup'), detail: t('mock.area.cleanupDetail') },
+    { name: t('mock.area.storage'), detail: t('mock.area.storageDetail') },
+    { name: t('mock.area.performance'), detail: t('mock.area.performanceDetail') },
+    { name: t('mock.area.security'), detail: t('mock.area.securityDetail') },
   ]
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold">Smart Scan</p>
-          <p className="text-[10px] text-muted-foreground">One-click health check</p>
+          <p className="text-sm font-semibold">{t('mock.smartScan')}</p>
+          <p className="text-[10px] text-muted-foreground">{t('mock.oneClick')}</p>
         </div>
         <span className="rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary">
-          Ready
+          {t('mock.complete')}
         </span>
       </div>
       <div className="grid grid-cols-2 gap-2">
@@ -195,13 +210,14 @@ function SmartScanScreen() {
         ))}
       </div>
       <div className="rounded-xl bg-primary px-4 py-2.5 text-center text-[11px] font-semibold text-primary-foreground shadow-glow">
-        Start Smart Scan
+        {t('mock.runSmartScan')}
       </div>
     </div>
   )
 }
 
 function StartupScreen() {
+  const { t } = useTranslation()
   const apps = [
     { name: 'Cloud Sync', impact: 'High', on: true },
     { name: 'Chat Helper', impact: 'Medium', on: true },
@@ -210,7 +226,7 @@ function StartupScreen() {
   ]
   return (
     <div className="space-y-2">
-      <p className="text-sm font-semibold">Startup Applications</p>
+      <p className="text-sm font-semibold">{t('mock.startupApps')}</p>
       {apps.map((app) => (
         <div
           key={app.name}
@@ -218,7 +234,9 @@ function StartupScreen() {
         >
           <div>
             <p className="text-[11px] font-medium">{app.name}</p>
-            <p className="text-[9px] text-muted-foreground">{app.impact} impact</p>
+            <p className="text-[9px] text-muted-foreground">
+              {t('mock.impact', { level: app.impact })}
+            </p>
           </div>
           <span
             className={cn(
@@ -240,13 +258,14 @@ function StartupScreen() {
 }
 
 function DuplicatesScreen() {
+  const { t } = useTranslation()
   return (
     <div className="space-y-3">
-      <p className="text-sm font-semibold">Duplicate Files</p>
+      <p className="text-sm font-semibold">{t('mock.duplicates')}</p>
       {[1, 2, 3].map((g) => (
         <div key={g} className="rounded-xl border border-border/70 bg-card p-3">
           <div className="flex items-center justify-between">
-            <p className="text-[11px] font-medium">Group {g} · 3 copies</p>
+            <p className="text-[11px] font-medium">{t('mock.groupCopies', { n: g })}</p>
             <p className="text-[10px] text-primary">+240 MB</p>
           </div>
           <div className="mt-2 flex gap-2">
@@ -261,13 +280,14 @@ function DuplicatesScreen() {
 }
 
 function StorageScreen() {
+  const { t } = useTranslation()
   return (
     <div className="space-y-3">
-      <p className="text-sm font-semibold">Disk Usage Analyzer</p>
+      <p className="text-sm font-semibold">{t('mock.diskAnalyzer')}</p>
       <div className="rounded-xl border border-border/70 bg-card p-4">
         <div className="flex justify-between text-[10px]">
           <span>System · 512 GB</span>
-          <span className="text-success">Healthy</span>
+          <span className="text-success">{t('mock.healthy')}</span>
         </div>
         <div className="mt-3 h-3 overflow-hidden rounded-full bg-muted">
           <div className="flex h-full">
@@ -277,24 +297,31 @@ function StorageScreen() {
           </div>
         </div>
         <div className="mt-3 grid grid-cols-3 gap-2 text-[9px] text-muted-foreground">
-          <span>Videos 42%</span>
-          <span>Docs 18%</span>
-          <span>Apps 12%</span>
+          <span>{t('mock.videos')} 42%</span>
+          <span>{t('mock.docs')} 18%</span>
+          <span>{t('mock.apps')} 12%</span>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <Metric label="Used" value="326 GB" />
-        <Metric label="Available" value="186 GB" tone="success" />
+        <Metric label={t('mock.used')} value="326 GB" />
+        <Metric label={t('mock.available')} value="186 GB" tone="success" />
       </div>
     </div>
   )
 }
 
 function CleanupScreen() {
-  const cats = ['Junk Files', 'Temporary Files', 'Browser Cache', 'System Cache', 'Recycle Bin']
+  const { t } = useTranslation()
+  const cats = [
+    t('mock.junkFiles'),
+    t('mock.tempFiles'),
+    t('mock.browserCache'),
+    t('mock.systemCache'),
+    t('mock.recycleBin'),
+  ]
   return (
     <div className="space-y-2">
-      <p className="text-sm font-semibold">Cleanup</p>
+      <p className="text-sm font-semibold">{t('mock.cleanup')}</p>
       {cats.map((c, i) => (
         <div
           key={c}
@@ -312,12 +339,13 @@ function CleanupScreen() {
 }
 
 function MonitoringScreen() {
+  const { t } = useTranslation()
   return (
     <div className="space-y-3">
-      <p className="text-sm font-semibold">Monitoring</p>
+      <p className="text-sm font-semibold">{t('mock.monitoring')}</p>
       <div className="grid grid-cols-2 gap-2">
         <div className="rounded-xl border border-border/70 bg-card p-3">
-          <p className="text-[9px] text-muted-foreground">CPU Usage</p>
+          <p className="text-[9px] text-muted-foreground">{t('mock.cpuUsage')}</p>
           <p className="text-xl font-semibold text-primary">24%</p>
           <div className="mt-2 flex h-12 items-end gap-0.5">
             {[40, 55, 35, 70, 45, 30, 50, 42, 38, 60, 28, 44].map((h, i) => (
@@ -330,7 +358,7 @@ function MonitoringScreen() {
           </div>
         </div>
         <div className="rounded-xl border border-border/70 bg-card p-3">
-          <p className="text-[9px] text-muted-foreground">Memory</p>
+          <p className="text-[9px] text-muted-foreground">{t('mock.memory')}</p>
           <p className="text-xl font-semibold text-accent-cyan">52%</p>
           <div className="mt-2 flex h-12 items-end gap-0.5">
             {[50, 48, 52, 55, 51, 49, 53, 56, 52, 50, 54, 51].map((h, i) => (

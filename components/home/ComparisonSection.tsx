@@ -9,35 +9,37 @@ import { Magnetic } from '@/components/common/Magnetic'
 import { Button } from '@/components/ui/button'
 import { comparisons } from '@/constants/content'
 import { useLenis } from '@/components/layout/SmoothScroll'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 export function ComparisonSection() {
   const { scrollTo } = useLenis()
+  const { t } = useTranslation()
 
   return (
     <SectionWrapper id="comparison">
       <SectionHeading
-        eyebrow="Before & after"
-        title="Measurable gains after one Smart Scan"
-        description="Illustrative results based on typical cleanup and startup optimization workflows in EdaCleaner."
+        eyebrow={t('comparison.eyebrow')}
+        title={t('comparison.title')}
+        description={t('comparison.description')}
         className="mb-12"
       />
 
       <div className="mx-auto max-w-3xl space-y-6">
         <div className="mb-2 flex justify-end gap-6 text-xs font-medium uppercase tracking-wide">
-          <span className="text-muted-foreground">Before</span>
-          <span className="text-primary">After</span>
+          <span className="text-muted-foreground">{t('common.before')}</span>
+          <span className="text-primary">{t('common.after')}</span>
         </div>
 
         {comparisons.map((row, i) => (
-          <ComparisonRow key={row.label} row={row} delay={i * 0.08} />
+          <ComparisonRow key={row.labelKey} row={row} delay={i * 0.08} />
         ))}
 
         <div className="flex justify-center pt-4">
           <Magnetic>
             <Button variant="glow" size="lg" onClick={() => scrollTo('#download')}>
               <Download strokeWidth={1.75} />
-              Get these results — Download Free
+              {t('comparison.cta')}
             </Button>
           </Magnetic>
         </div>
@@ -54,6 +56,7 @@ function ComparisonRow({
   delay: number
 }) {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.4 })
+  const { t } = useTranslation()
 
   return (
     <motion.div
@@ -65,7 +68,7 @@ function ComparisonRow({
       className="rounded-xl border border-border/80 bg-card p-4 shadow-card sm:p-5"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-foreground">{row.label}</p>
+        <p className="text-sm font-semibold text-foreground">{t(row.labelKey)}</p>
         <p className="text-xs text-muted-foreground">
           <span className="line-through opacity-70">{row.beforeLabel}</span>
           <span className="mx-2 text-border">→</span>
@@ -75,12 +78,12 @@ function ComparisonRow({
 
       <div className="space-y-2.5">
         <Bar
-          label="Before"
+          label={t('common.before')}
           width={inView ? row.before : 0}
           className="bg-muted-foreground/35"
         />
         <Bar
-          label="After"
+          label={t('common.after')}
           width={inView ? row.after : 0}
           className="bg-gradient-to-r from-primary to-accent-cyan"
         />

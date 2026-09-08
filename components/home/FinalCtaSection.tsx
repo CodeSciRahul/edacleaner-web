@@ -8,10 +8,11 @@ import { Particles } from '@/components/common/Particles'
 import { Magnetic } from '@/components/common/Magnetic'
 import { Button } from '@/components/ui/button'
 import { useLenis } from '@/components/layout/SmoothScroll'
-import { siteConfig } from '@/constants/site'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function FinalCtaSection() {
   const { scrollTo } = useLenis()
+  const { t } = useTranslation()
 
   return (
     <SectionWrapper id="cta" padding="lg" className="overflow-hidden" disableAnimation>
@@ -36,14 +37,11 @@ export function FinalCtaSection() {
           className="relative mx-auto max-w-3xl"
         >
           <p className="mb-4 text-[11px] font-semibold uppercase tracking-wide text-primary">
-            Final step
+            {t('finalCta.eyebrow')}
           </p>
-          <h2 className="text-hero text-foreground text-balance">
-            Ready to Make Your PC Fast Again?
-          </h2>
+          <h2 className="text-hero text-foreground text-balance">{t('finalCta.title')}</h2>
           <p className="mx-auto mt-5 max-w-xl text-hero-sub text-muted-foreground text-pretty">
-            Download EdaCleaner free, run one Smart Scan, and feel the difference in minutes —
-            no credit card required.
+            {t('finalCta.description')}
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4">
@@ -60,13 +58,11 @@ export function FinalCtaSection() {
                   className="relative h-14 min-w-[240px] px-10 text-base shadow-glow-lg"
                 >
                   <Download strokeWidth={1.75} className="size-5" />
-                  {siteConfig.download.label}
+                  {t('site.downloadLabel')}
                 </Button>
               </div>
             </Magnetic>
-            <p className="text-xs text-muted-foreground">
-              Free plan included · Windows, macOS & Linux · Cancel Pro anytime
-            </p>
+            <p className="text-xs text-muted-foreground">{t('finalCta.footnote')}</p>
           </div>
         </motion.div>
       </div>

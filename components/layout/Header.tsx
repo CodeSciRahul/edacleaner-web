@@ -5,21 +5,25 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Download, Menu, X } from 'lucide-react'
 import { Logo } from '@/components/common/Logo'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher'
 import { Container } from '@/components/common/Container'
 import { Magnetic } from '@/components/common/Magnetic'
 import { Button } from '@/components/ui/button'
 import { siteConfig } from '@/constants/site'
+import { navItems } from '@/constants/content'
 import { useActiveSection } from '@/hooks/use-active-section'
 import { useLenis } from '@/components/layout/SmoothScroll'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
-const NAV_IDS = siteConfig.nav.map((n) => n.href.replace('#', ''))
+const NAV_IDS = navItems.map((n) => n.href.replace('#', ''))
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const active = useActiveSection(NAV_IDS)
   const { progress, scrollTo } = useLenis()
+  const { t } = useTranslation()
 
   useEffect(() => {
     setScrolled(progress > 0.01 || window.scrollY > 12)
@@ -52,8 +56,8 @@ export function Header() {
       <Container className="flex h-full items-center justify-between gap-4">
         <Logo />
 
-        <nav className="hidden items-center gap-0.5 md:flex" aria-label="Primary">
-          {siteConfig.nav.map((item) => {
+        <nav className="hidden items-center gap-0.5 md:flex" aria-label={t('nav.primary')}>
+          {navItems.map((item) => {
             const id = item.href.replace('#', '')
             const isActive = active === id
             return (
@@ -68,7 +72,7 @@ export function Header() {
                     : 'text-muted-foreground hover:text-foreground',
                 )}
               >
-                {item.label}
+                {t(item.labelKey)}
                 <span
                   className={cn(
                     'absolute inset-x-3 -bottom-0.5 h-px origin-left bg-primary transition-transform duration-300 ease-premium',
@@ -81,6 +85,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
+          <LanguageSwitcher className="hidden sm:block" />
           <ThemeToggle />
           <Magnetic strength={0.35} className="hidden sm:inline-flex">
             <Button
@@ -89,14 +94,14 @@ export function Header() {
               onClick={() => go(siteConfig.download.windows)}
             >
               <Download strokeWidth={1.75} />
-              Download
+              {t('common.download')}
             </Button>
           </Magnetic>
           <Button
             variant="ghost"
             size="icon"
             className="md:hidden"
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? t('common.closeMenu') : t('common.openMenu')}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
@@ -115,7 +120,7 @@ export function Header() {
             className="border-b border-border/70 bg-background/95 backdrop-blur-md md:hidden"
           >
             <Container className="flex flex-col gap-1 py-4">
-              {siteConfig.nav.map((item) => {
+              {navItems.map((item) => {
                 const id = item.href.replace('#', '')
                 return (
                   <button
@@ -127,17 +132,20 @@ export function Header() {
                       active === id ? 'bg-accent text-foreground' : 'text-foreground',
                     )}
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                   </button>
                 )
               })}
+              <div className="px-1 py-2">
+                <LanguageSwitcher />
+              </div>
               <Button
                 variant="glow"
                 className="mt-2"
                 onClick={() => go(siteConfig.download.windows)}
               >
                 <Download strokeWidth={1.75} />
-                {siteConfig.download.label}
+                {t('site.downloadLabel')}
               </Button>
             </Container>
           </motion.div>

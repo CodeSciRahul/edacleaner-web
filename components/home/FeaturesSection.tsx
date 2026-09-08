@@ -14,6 +14,8 @@ import {
   type FeatureCategory,
   type FeatureItem,
 } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/locales/en'
 import { cn } from '@/lib/utils'
 
 const categoryTone: Record<FeatureCategory, string> = {
@@ -32,6 +34,7 @@ const categoryAccent: Record<FeatureCategory, string> = {
 
 export function FeaturesSection() {
   const { scrollTo } = useLenis()
+  const { t } = useTranslation()
   const [category, setCategory] = useState<FeatureCategory | 'all'>('all')
   const [activeId, setActiveId] = useState(features[0].id)
 
@@ -52,9 +55,9 @@ export function FeaturesSection() {
   return (
     <SectionWrapper id="features" className="overflow-hidden">
       <SectionHeading
-        eyebrow="Features"
-        title="A full toolkit — organized the way you clean"
-        description="Explore cleanup, storage, performance, and insights — the same modules that ship in the EdaCleaner desktop app."
+        eyebrow={t('features.eyebrow')}
+        title={t('features.title')}
+        description={t('features.description')}
         className="mb-10"
       />
 
@@ -62,7 +65,7 @@ export function FeaturesSection() {
       <div
         className="mb-8 flex flex-wrap items-center justify-center gap-2"
         role="tablist"
-        aria-label="Feature categories"
+        aria-label={t('features.categoriesAria')}
       >
         {featureCategories.map((cat) => {
           const selected = category === cat.id
@@ -80,7 +83,7 @@ export function FeaturesSection() {
                   : 'border-border/80 bg-card/80 text-muted-foreground hover:border-border hover:text-foreground',
               )}
             >
-              {cat.label}
+              {t(cat.labelKey)}
             </button>
           )
         })}
@@ -92,14 +95,16 @@ export function FeaturesSection() {
         <div className="border-b border-border/70 lg:border-b-0 lg:border-r">
           <div className="border-b border-border/60 px-5 py-4">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              {category === 'all' ? 'All tools' : featureCategories.find((c) => c.id === category)?.label}
+              {category === 'all'
+                ? t('common.allTools')
+                : t(featureCategories.find((c) => c.id === category)!.labelKey)}
               <span className="ml-2 tabular-nums text-foreground/50">{filtered.length}</span>
             </p>
           </div>
           <ul
             className="max-h-[22rem] space-y-0.5 overflow-y-auto p-2 scrollbar-thin sm:max-h-[28rem]"
             role="listbox"
-            aria-label="Features"
+            aria-label={t('features.listAria')}
           >
             {filtered.map((feature) => (
               <FeatureListItem
@@ -142,21 +147,19 @@ export function FeaturesSection() {
                     >
                       <active.icon className="size-7" strokeWidth={1.75} />
                     </div>
-                    {active.highlight ? (
-                      <span className="rounded-full border border-border/70 bg-background/70 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur-sm">
-                        {active.highlight}
-                      </span>
-                    ) : null}
+                    <span className="rounded-full border border-border/70 bg-background/70 px-3 py-1 text-[11px] font-semibold text-foreground backdrop-blur-sm">
+                      {t(active.highlightKey)}
+                    </span>
                   </div>
 
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
-                    {active.category}
+                    {t(featureCategories.find((c) => c.id === active.category)!.labelKey)}
                   </p>
                   <h3 className="mt-1 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-                    {active.title}
+                    {t(active.titleKey)}
                   </h3>
                   <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-                    {active.description}
+                    {t(active.descriptionKey)}
                   </p>
 
                   <div className="relative mt-8 flex-1">
@@ -171,7 +174,7 @@ export function FeaturesSection() {
                         onClick={() => scrollTo('#download')}
                         className="gap-2"
                       >
-                        Try it free
+                        {t('common.tryItFree')}
                         <ArrowUpRight strokeWidth={1.75} />
                       </Button>
                     </Magnetic>
@@ -218,8 +221,12 @@ export function FeaturesSection() {
                 <Icon className="size-5" strokeWidth={1.75} />
               </span>
               <span>
-                <span className="block text-sm font-semibold text-foreground">{feature.title}</span>
-                <span className="block text-xs text-muted-foreground">{feature.highlight}</span>
+                <span className="block text-sm font-semibold text-foreground">
+                  {t(feature.titleKey)}
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  {t(feature.highlightKey)}
+                </span>
               </span>
             </motion.button>
           )
@@ -239,6 +246,7 @@ function FeatureListItem({
   onSelect: () => void
 }) {
   const Icon = feature.icon
+  const { t } = useTranslation()
   return (
     <li>
       <button
@@ -266,10 +274,10 @@ function FeatureListItem({
         </span>
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm font-medium text-foreground">
-            {feature.title}
+            {t(feature.titleKey)}
           </span>
           <span className="block truncate text-[11px] text-muted-foreground">
-            {feature.highlight ?? feature.category}
+            {t(feature.highlightKey)}
           </span>
         </span>
         {active ? (
@@ -285,16 +293,25 @@ function FeatureListItem({
 
 /** Lightweight visual mock per feature category / id */
 function FeatureVisual({ feature }: { feature: FeatureItem }) {
+  const { t } = useTranslation()
+
   if (feature.category === 'cleanup') {
     return (
       <div className="rounded-2xl border border-border/70 bg-background/80 p-4 shadow-card backdrop-blur-sm">
         <div className="mb-3 flex items-center justify-between text-[11px]">
-          <span className="font-medium text-foreground">Reclaimable</span>
+          <span className="font-medium text-foreground">{t('features.visual.reclaimable')}</span>
           <span className="font-semibold text-primary">4.8 GB</span>
         </div>
         <div className="space-y-2">
-          {['Junk Files', 'Temp Data', 'Browser Cache', 'System Cache'].map((label, i) => (
-            <div key={label} className="flex items-center gap-3">
+          {(
+            [
+              'features.visual.junkFiles',
+              'features.visual.tempData',
+              'features.visual.browserCache',
+              'features.visual.systemCache',
+            ] as TranslationKey[]
+          ).map((labelKey, i) => (
+            <div key={labelKey} className="flex items-center gap-3">
               <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
                 <motion.div
                   className="h-full rounded-full bg-gradient-to-r from-primary to-accent-cyan"
@@ -303,7 +320,9 @@ function FeatureVisual({ feature }: { feature: FeatureItem }) {
                   transition={{ duration: 0.7, delay: 0.1 * i, ease: [0.22, 1, 0.36, 1] }}
                 />
               </div>
-              <span className="w-16 text-right text-[10px] text-muted-foreground">{label.split(' ')[0]}</span>
+              <span className="w-16 text-right text-[10px] text-muted-foreground">
+                {t(labelKey).split(' ')[0]}
+              </span>
             </div>
           ))}
         </div>
@@ -315,8 +334,8 @@ function FeatureVisual({ feature }: { feature: FeatureItem }) {
     return (
       <div className="rounded-2xl border border-border/70 bg-background/80 p-4 shadow-card backdrop-blur-sm">
         <div className="mb-3 flex justify-between text-[11px]">
-          <span className="font-medium">Disk health</span>
-          <span className="font-semibold text-success">Healthy</span>
+          <span className="font-medium">{t('features.visual.diskHealth')}</span>
+          <span className="font-semibold text-success">{t('features.visual.healthy')}</span>
         </div>
         <div className="flex h-3 overflow-hidden rounded-full bg-muted">
           <motion.div
@@ -339,9 +358,9 @@ function FeatureVisual({ feature }: { feature: FeatureItem }) {
           />
         </div>
         <div className="mt-3 grid grid-cols-3 gap-2 text-[10px] text-muted-foreground">
-          <span>Videos 42%</span>
-          <span>Docs 18%</span>
-          <span>Apps 12%</span>
+          <span>{t('features.visual.videos', { pct: 42 })}</span>
+          <span>{t('features.visual.docs', { pct: 18 })}</span>
+          <span>{t('features.visual.apps', { pct: 12 })}</span>
         </div>
       </div>
     )
@@ -350,7 +369,9 @@ function FeatureVisual({ feature }: { feature: FeatureItem }) {
   if (feature.category === 'performance') {
     return (
       <div className="rounded-2xl border border-border/70 bg-background/80 p-4 shadow-card backdrop-blur-sm">
-        <p className="mb-3 text-[11px] font-medium text-foreground">Startup impact</p>
+        <p className="mb-3 text-[11px] font-medium text-foreground">
+          {t('features.visual.startupImpact')}
+        </p>
         {[
           { name: 'Cloud Sync', on: true },
           { name: 'Chat Helper', on: true },
@@ -387,7 +408,7 @@ function FeatureVisual({ feature }: { feature: FeatureItem }) {
   return (
     <div className="grid grid-cols-2 gap-3">
       <div className="rounded-2xl border border-border/70 bg-background/80 p-4 shadow-card backdrop-blur-sm">
-        <p className="text-[10px] text-muted-foreground">Health score</p>
+        <p className="text-[10px] text-muted-foreground">{t('features.visual.healthScore')}</p>
         <motion.p
           className="mt-1 text-3xl font-bold tabular-nums text-primary"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -397,7 +418,7 @@ function FeatureVisual({ feature }: { feature: FeatureItem }) {
         </motion.p>
       </div>
       <div className="rounded-2xl border border-border/70 bg-background/80 p-4 shadow-card backdrop-blur-sm">
-        <p className="text-[10px] text-muted-foreground">CPU</p>
+        <p className="text-[10px] text-muted-foreground">{t('features.visual.cpu')}</p>
         <div className="mt-2 flex h-10 items-end gap-0.5">
           {[40, 55, 35, 70, 45, 30, 50, 42].map((h, i) => (
             <motion.div

@@ -8,6 +8,7 @@ import { SectionHeading } from '@/components/common/SectionHeading'
 import { MotionItem, MotionStagger } from '@/components/common/Motion'
 import { Button } from '@/components/ui/button'
 import { downloads, linuxDownloadFormats } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 import {
   fetchDownloadUrl,
@@ -82,6 +83,7 @@ function detectPreferredPlatform(): ReleasePlatform {
 type DownloadKey = string
 
 export function DownloadSection() {
+  const { t } = useTranslation()
   const [latest, setLatest] = useState<LatestVersion | null>(null)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loadingLatest, setLoadingLatest] = useState(true)
@@ -104,7 +106,7 @@ export function DownloadSection() {
         }
       } catch (err) {
         if (!cancelled) {
-          setLoadError(err instanceof Error ? err.message : 'Unable to load releases')
+          setLoadError(err instanceof Error ? err.message : t('download.loadFailed'))
         }
       } finally {
         if (!cancelled) setLoadingLatest(false)
@@ -114,7 +116,7 @@ export function DownloadSection() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [t])
 
   const cards = useMemo(() => {
     return downloads.map((item) => {
@@ -133,15 +135,15 @@ export function DownloadSection() {
 
       return {
         id: item.id,
-        name: item.name,
-        requirement: item.requirement,
+        name: t(item.nameKey),
+        requirement: t(item.requirementKey),
         placeholderFile: item.file,
         platform,
         releaseFile,
         linuxFormats,
       }
     })
-  }, [latest])
+  }, [latest, t])
 
   const handleDownload = useCallback(
     async (
@@ -171,27 +173,27 @@ export function DownloadSection() {
         anchor.remove()
       } catch (err) {
         setActionError(
-          err instanceof Error ? err.message : 'Download failed. Please try again.',
+          err instanceof Error ? err.message : t('download.failed'),
         )
       } finally {
         startTransition(() => setDownloadingId(null))
       }
     },
-    [],
+    [t],
   )
 
   return (
     <SectionWrapper id="download" className="border-t border-border/60 bg-surface/40">
       <SectionHeading
-        eyebrow="Download"
-        title="Get EdaCleaner for your platform"
-        description="Native installers for Windows, macOS, and Linux — same premium experience everywhere."
+        eyebrow={t('download.eyebrow')}
+        title={t('download.title')}
+        description={t('download.description')}
         className="mb-10"
       />
 
       {latest && (
         <p className="mb-6 text-center text-sm text-muted-foreground">
-          Latest{' '}
+          {t('download.latest')}{' '}
           <span className="font-medium text-foreground">v{latest.version}</span>
           {latest.releaseType !== 'stable' ? (
             <span className="ml-2 rounded-md bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
@@ -207,13 +209,13 @@ export function DownloadSection() {
       {loadingLatest && (
         <p className="mb-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="size-4 animate-spin" />
-          Loading latest installers…
+          {t('download.loading')}
         </p>
       )}
 
       {loadError && (
         <p className="mb-6 text-center text-sm text-amber-600 dark:text-amber-400">
-          Couldn’t reach the release server. Showing platform placeholders — try again shortly.
+          {t('download.loadError')}
         </p>
       )}
 
@@ -233,19 +235,21 @@ export function DownloadSection() {
           const busyPlatform = downloadingId?.startsWith(`${item.platform}`)
           const fileMeta = item.linuxFormats
             ? selectedLinux?.releaseFile
-              ? `${selectedLinux.label} · ${selectedLinux.hint}${
+              ? `${selectedLinux.label} · ${t(selectedLinux.hintKey)}${
                   selectedLinux.releaseFile.fileSize
                     ? ` · ${formatBytes(selectedLinux.releaseFile.fileSize)}`
                     : ''
                 }`
-              : `${selectedLinux?.label ?? 'Package'} · Coming soon`
+              : selectedLinux
+                ? t('download.comingSoonMeta', { label: selectedLinux.label })
+                : t('download.packageComingSoon')
             : item.releaseFile
               ? `${item.releaseFile.fileName ?? item.placeholderFile}${
                   item.releaseFile.fileSize
                     ? ` · ${formatBytes(item.releaseFile.fileSize)}`
                     : ''
                 }`
-              : `${item.placeholderFile} · Coming soon`
+              : t('download.comingSoonMeta', { label: item.placeholderFile })
 
           return (
             <MotionItem key={item.id} className="h-full">
@@ -269,7 +273,7 @@ export function DownloadSection() {
                 {item.linuxFormats ? (
                   <div
                     role="radiogroup"
-                    aria-label="Linux package format"
+                    aria-label={t('download.linuxFormatAria')}
                     className="mt-4 grid w-full grid-cols-3 gap-1 rounded-lg border border-border/70 bg-muted/30 p-1"
                   >
                     {item.linuxFormats.map((format) => {
@@ -333,10 +337,10 @@ export function DownloadSection() {
                     (item.linuxFormats
                       ? downloadingId === `linux:${selectedLinux?.installerType}`
                       : downloadingId === item.platform)
-                      ? 'Preparing…'
+                      ? t('common.preparing')
                       : available
-                        ? 'Download'
-                        : 'Coming soon'}
+                        ? t('common.download')
+                        : t('common.comingSoon')}
                   </Button>
                 </div>
               </motion.div>
@@ -346,7 +350,7 @@ export function DownloadSection() {
       </MotionStagger>
 
       <p className="mt-8 text-center text-xs text-muted-foreground">
-        Secure temporary download links · Free plan included with every download
+        {t('download.secureNote')}
       </p>
     </SectionWrapper>
   )

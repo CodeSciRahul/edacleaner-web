@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { CheckCircle2, MonitorSmartphone, Sparkles, XCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { siteConfig } from '@/constants/site'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 type CheckoutStatus = 'success' | 'cancel' | 'idle'
@@ -20,6 +21,7 @@ function buildDeepLink(status: CheckoutStatus, sessionId: string | null): string
 }
 
 export function CheckoutReturnPanel(): React.ReactElement {
+  const { t } = useTranslation()
   const searchParams = useSearchParams()
   const checkout = searchParams.get('checkout')
   const sessionId = searchParams.get('session_id')
@@ -29,7 +31,7 @@ export function CheckoutReturnPanel(): React.ReactElement {
 
   const deepLink = useMemo(
     () => buildDeepLink(status === 'idle' ? 'success' : status, sessionId),
-    [status, sessionId]
+    [status, sessionId],
   )
 
   const [launchAttempted, setLaunchAttempted] = useState(false)
@@ -37,7 +39,6 @@ export function CheckoutReturnPanel(): React.ReactElement {
 
   const openDesktopApp = useCallback(() => {
     setLaunchAttempted(true)
-    // Custom protocol handoff — OS prompts / opens EDA Cleaner when registered.
     window.location.href = deepLink
   }, [deepLink])
 
@@ -57,18 +58,15 @@ export function CheckoutReturnPanel(): React.ReactElement {
           <Sparkles className="size-6" strokeWidth={1.75} />
         </div>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          {siteConfig.name} plans
+          {t('checkout.idleTitle', { name: siteConfig.name })}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Manage upgrades in the desktop app. Start free, then unlock Pro or Premium when you are
-          ready.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t('checkout.idleBody')}</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Button asChild variant="glow">
-            <Link href="/#pricing">View pricing</Link>
+            <Link href="/#pricing">{t('checkout.viewPricing')}</Link>
           </Button>
           <Button asChild variant="outline">
-            <Link href="/#download">Download app</Link>
+            <Link href="/#download">{t('checkout.downloadApp')}</Link>
           </Button>
         </div>
       </div>
@@ -81,7 +79,7 @@ export function CheckoutReturnPanel(): React.ReactElement {
     <div
       className={cn(
         'mx-auto max-w-xl overflow-hidden rounded-2xl border bg-card/90 shadow-sm',
-        isSuccess ? 'border-primary/30' : 'border-border'
+        isSuccess ? 'border-primary/30' : 'border-border',
       )}
     >
       <div
@@ -89,7 +87,7 @@ export function CheckoutReturnPanel(): React.ReactElement {
           'border-b px-6 py-8 text-center sm:px-8',
           isSuccess
             ? 'bg-gradient-to-br from-primary/15 via-card to-card'
-            : 'bg-gradient-to-br from-muted/60 via-card to-card'
+            : 'bg-gradient-to-br from-muted/60 via-card to-card',
         )}
       >
         <div
@@ -97,7 +95,7 @@ export function CheckoutReturnPanel(): React.ReactElement {
             'mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl shadow-sm',
             isSuccess
               ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground'
+              : 'bg-muted text-muted-foreground',
           )}
         >
           {isSuccess ? (
@@ -107,12 +105,10 @@ export function CheckoutReturnPanel(): React.ReactElement {
           )}
         </div>
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          {isSuccess ? 'Payment successful' : 'Checkout canceled'}
+          {isSuccess ? t('checkout.successTitle') : t('checkout.cancelTitle')}
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {isSuccess
-            ? 'Your subscription is activating. Open EDA Cleaner and log in with the same checkout email. We send a one-time code if you have not set a password yet.'
-            : 'No charge was made. You can reopen the desktop app and try again whenever you are ready.'}
+          {isSuccess ? t('checkout.successBody') : t('checkout.cancelBody')}
         </p>
       </div>
 
@@ -122,9 +118,9 @@ export function CheckoutReturnPanel(): React.ReactElement {
           <p className="text-xs leading-relaxed text-muted-foreground">
             {isSuccess
               ? launchAttempted
-                ? 'If the app did not open automatically, click the button below. Log in with your checkout email and enter the email code so the paid plan unlocks on this PC.'
-                : 'We are launching the desktop app. After it opens, log in with your checkout email if you purchased a plan without a password…'
-              : 'Return to EDA Cleaner to stay on Free, or pick another plan later.'}
+                ? t('checkout.launchFallback')
+                : t('checkout.launching')
+              : t('checkout.cancelHint')}
           </p>
         </div>
 
@@ -134,20 +130,20 @@ export function CheckoutReturnPanel(): React.ReactElement {
           className="w-full"
           onClick={openDesktopApp}
         >
-          {isSuccess ? 'Open EDA Cleaner' : 'Back to EDA Cleaner'}
+          {isSuccess ? t('checkout.openApp') : t('checkout.backToApp')}
         </Button>
 
         <div className="flex flex-wrap items-center justify-center gap-3 text-xs">
           <Link href="/#download" className="text-primary underline-offset-4 hover:underline">
-            Download the app
+            {t('checkout.downloadLink')}
           </Link>
           <span className="text-border">·</span>
           <Link href="/#pricing" className="text-muted-foreground underline-offset-4 hover:underline">
-            View plans
+            {t('checkout.viewPlans')}
           </Link>
           <span className="text-border">·</span>
           <Link href="/" className="text-muted-foreground underline-offset-4 hover:underline">
-            Home
+            {t('checkout.home')}
           </Link>
         </div>
       </div>

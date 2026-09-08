@@ -13,6 +13,7 @@ import { SectionWrapper } from '@/components/common/SectionWrapper'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { MotionItem, MotionStagger } from '@/components/common/Motion'
 import { trustBadges, trustLogos } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 const icons = {
@@ -25,12 +26,14 @@ const icons = {
 } as const
 
 export function TrustSection() {
+  const { t } = useTranslation()
+
   return (
     <SectionWrapper id="trust" className="bg-surface/30">
       <SectionHeading
-        eyebrow="Trust"
-        title="Built to earn confidence before you click Download"
-        description="Security, privacy, and compatibility signals that matter when you install system software."
+        eyebrow={t('trust.eyebrow')}
+        title={t('trust.title')}
+        description={t('trust.description')}
         className="mb-12"
       />
 
@@ -38,7 +41,7 @@ export function TrustSection() {
         {trustBadges.map((badge) => {
           const Icon = icons[badge.icon]
           return (
-            <MotionItem key={badge.title}>
+            <MotionItem key={badge.titleKey}>
               <motion.div
                 whileHover={{ y: -4 }}
                 transition={{ type: 'spring', stiffness: 360, damping: 24 }}
@@ -50,9 +53,9 @@ export function TrustSection() {
                 <div className="mb-3 flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="size-5" strokeWidth={1.75} />
                 </div>
-                <h3 className="text-sm font-semibold text-foreground">{badge.title}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{t(badge.titleKey)}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                  {badge.description}
+                  {t(badge.descriptionKey)}
                 </p>
               </motion.div>
             </MotionItem>
@@ -68,7 +71,7 @@ export function TrustSection() {
         className="mt-12"
       >
         <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-          Trusted by teams and creators
+          {t('trust.logosLabel')}
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
           {trustLogos.map((name) => (

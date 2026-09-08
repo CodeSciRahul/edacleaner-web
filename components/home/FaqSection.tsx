@@ -10,14 +10,17 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { faqs } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function FaqSection() {
+  const { t } = useTranslation()
+
   return (
     <SectionWrapper id="faq">
       <SectionHeading
-        eyebrow="FAQ"
-        title="Questions before you download"
-        description="Straight answers about pricing, safety, and Windows support."
+        eyebrow={t('faq.eyebrow')}
+        title={t('faq.title')}
+        description={t('faq.description')}
         className="mb-10"
       />
 
@@ -30,12 +33,12 @@ export function FaqSection() {
       >
         <Accordion type="single" collapsible defaultValue="item-0" className="px-5 sm:px-7">
           {faqs.map((faq, i) => (
-            <AccordionItem key={faq.question} value={`item-${i}`}>
+            <AccordionItem key={faq.qKey} value={`item-${i}`}>
               <AccordionTrigger className="text-[15px] hover:text-primary">
-                {faq.question}
+                {t(faq.qKey)}
               </AccordionTrigger>
               <AccordionContent className="text-[15px] leading-relaxed">
-                {faq.answer}
+                {t(faq.aKey)}
               </AccordionContent>
             </AccordionItem>
           ))}

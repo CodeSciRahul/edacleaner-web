@@ -8,6 +8,7 @@ import { Star } from 'lucide-react'
 import { SectionWrapper } from '@/components/common/SectionWrapper'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { testimonials } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 const toneClass = {
@@ -18,6 +19,7 @@ const toneClass = {
 } as const
 
 export function TestimonialsSection() {
+  const { t } = useTranslation()
   const [paused, setPaused] = useState(false)
   const [selected, setSelected] = useState(0)
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -55,9 +57,9 @@ export function TestimonialsSection() {
   return (
     <SectionWrapper id="testimonials">
       <SectionHeading
-        eyebrow="Testimonials"
-        title="Loved by people who live on their PCs"
-        description="Real roles, realistic stories — engineers, designers, gamers, editors, and IT teams."
+        eyebrow={t('testimonials.eyebrow')}
+        title={t('testimonials.title')}
+        description={t('testimonials.description')}
         className="mb-12"
       />
 
@@ -68,9 +70,9 @@ export function TestimonialsSection() {
       >
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex touch-pan-y">
-            {testimonials.map((t) => (
+            {testimonials.map((item) => (
               <div
-                key={t.name}
+                key={item.name}
                 className="min-w-0 shrink-0 grow-0 basis-full px-1.5 sm:basis-1/2 lg:basis-1/3"
               >
                 <motion.blockquote
@@ -82,30 +84,33 @@ export function TestimonialsSection() {
                     <span
                       className={cn(
                         'flex size-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold',
-                        toneClass[t.tone],
+                        toneClass[item.tone],
                       )}
                       aria-hidden
                     >
-                      {t.initials}
+                      {item.initials}
                     </span>
                     <div className="min-w-0">
                       <cite className="block truncate text-sm font-semibold not-italic text-foreground">
-                        {t.name}
+                        {item.name}
                       </cite>
                       <span className="block truncate text-xs text-muted-foreground">
-                        {t.role} · {t.company}
+                        {t(item.roleKey)} · {t(item.companyKey)}
                       </span>
                     </div>
                   </div>
 
-                  <div className="mb-3 flex gap-0.5 text-warning" aria-label={`${t.rating} out of 5 stars`}>
-                    {Array.from({ length: t.rating }).map((_, i) => (
+                  <div
+                    className="mb-3 flex gap-0.5 text-warning"
+                    aria-label={t('common.starsOutOf5', { rating: item.rating })}
+                  >
+                    {Array.from({ length: item.rating }).map((_, i) => (
                       <Star key={i} className="size-4 fill-current" strokeWidth={0} />
                     ))}
                   </div>
 
                   <p className="flex-1 text-sm leading-relaxed text-foreground/90 text-pretty">
-                    “{t.quote}”
+                    “{t(item.quoteKey)}”
                   </p>
                 </motion.blockquote>
               </div>
@@ -114,11 +119,11 @@ export function TestimonialsSection() {
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-2">
-          {testimonials.map((t, i) => (
+          {testimonials.map((item, i) => (
             <button
-              key={t.name}
+              key={item.name}
               type="button"
-              aria-label={`Go to review ${i + 1}`}
+              aria-label={t('common.goToReview', { n: i + 1 })}
               onClick={() => emblaApi?.scrollTo(i)}
               className={cn(
                 'h-1.5 rounded-full transition-all',
@@ -129,7 +134,10 @@ export function TestimonialsSection() {
         </div>
 
         <p className="mt-3 text-center text-[11px] text-muted-foreground">
-          {paused ? 'Paused' : 'Auto-scrolling'} · hover to pause
+          {t('testimonials.carouselHint', {
+            state: paused ? t('common.paused') : t('common.autoScrolling'),
+            hint: t('common.hoverToPause'),
+          })}
         </p>
       </div>
     </SectionWrapper>

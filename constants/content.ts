@@ -22,200 +22,209 @@ import {
   Trash2,
   Zap,
 } from 'lucide-react'
+import type { TranslationKey } from '@/i18n/locales/en'
 
 export const stats = [
-  { value: 500, suffix: 'K+', label: 'Downloads', decimals: 0 },
-  { value: 98, suffix: '%', label: 'User Satisfaction', decimals: 0 },
-  { value: 4.9, suffix: '/5', label: 'Average Rating', decimals: 1 },
-  { value: 15, suffix: 'M+', label: 'Files Cleaned', decimals: 0 },
+  { value: 500, suffix: 'K+', labelKey: 'stats.downloads' as const, decimals: 0 },
+  { value: 98, suffix: '%', labelKey: 'stats.satisfaction' as const, decimals: 0 },
+  { value: 4.9, suffix: '/5', labelKey: 'stats.rating' as const, decimals: 1 },
+  { value: 15, suffix: 'M+', labelKey: 'stats.filesCleaned' as const, decimals: 0 },
 ] as const
 
 export const heroFloatCards = [
-  { label: 'Junk Removed', value: '12.4 GB', icon: Trash2, tone: 'success' as const },
-  { label: 'Startup Optimized', value: '18 apps', icon: Rocket, tone: 'primary' as const },
-  { label: 'RAM Freed', value: '2.1 GB', icon: MemoryStick, tone: 'cyan' as const },
-  { label: 'Health Score', value: '94', icon: Shield, tone: 'violet' as const },
+  { labelKey: 'hero.card.junk' as const, value: '12.4 GB', icon: Trash2, tone: 'success' as const },
+  {
+    labelKey: 'hero.card.startup' as const,
+    value: '18 apps',
+    icon: Rocket,
+    tone: 'primary' as const,
+  },
+  { labelKey: 'hero.card.ram' as const, value: '2.1 GB', icon: MemoryStick, tone: 'cyan' as const },
+  { labelKey: 'hero.card.health' as const, value: '94', icon: Shield, tone: 'violet' as const },
 ]
 
 export type FeatureCategory = 'cleanup' | 'storage' | 'performance' | 'insights'
 
 export type FeatureItem = {
   id: string
-  title: string
-  description: string
+  titleKey: TranslationKey
+  descriptionKey: TranslationKey
+  highlightKey: TranslationKey
   icon: LucideIcon
   category: FeatureCategory
-  highlight?: string
 }
 
 export const featureCategories: {
   id: FeatureCategory | 'all'
-  label: string
+  labelKey: TranslationKey
 }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'cleanup', label: 'Cleanup' },
-  { id: 'storage', label: 'Storage' },
-  { id: 'performance', label: 'Performance' },
-  { id: 'insights', label: 'Insights' },
+  { id: 'all', labelKey: 'features.cat.all' },
+  { id: 'cleanup', labelKey: 'features.cat.cleanup' },
+  { id: 'storage', labelKey: 'features.cat.storage' },
+  { id: 'performance', labelKey: 'features.cat.performance' },
+  { id: 'insights', labelKey: 'features.cat.insights' },
 ]
 
 /** Features that ship in the EdaCleaner desktop app (reachable UI only) */
 export const features: FeatureItem[] = [
   {
     id: 'smart-scan',
-    title: 'Smart Scan',
-    description:
-      'One-click health check across cleanup, storage, and performance — with a clear health score and reclaimable space.',
+    titleKey: 'feature.smart-scan.title',
+    descriptionKey: 'feature.smart-scan.description',
+    highlightKey: 'feature.smart-scan.highlight',
     icon: ScanSearch,
     category: 'insights',
-    highlight: 'Health score in seconds',
   },
   {
     id: 'junk',
-    title: 'Junk Files',
-    description:
-      'Remove leftover installers, crash dumps, and app debris without touching your personal files.',
+    titleKey: 'feature.junk.title',
+    descriptionKey: 'feature.junk.description',
+    highlightKey: 'feature.junk.highlight',
     icon: Trash2,
     category: 'cleanup',
-    highlight: 'Safe by default',
   },
   {
     id: 'temp',
-    title: 'Temporary Files',
-    description: 'Clear OS and application temporary folders that quietly eat disk space over time.',
+    titleKey: 'feature.temp.title',
+    descriptionKey: 'feature.temp.description',
+    highlightKey: 'feature.temp.highlight',
     icon: Brush,
     category: 'cleanup',
-    highlight: 'Instant reclaim',
   },
   {
     id: 'recycle',
-    title: 'Recycle Bin',
-    description: 'Permanently empty Trash / Recycle Bin when you are ready to reclaim space.',
+    titleKey: 'feature.recycle.title',
+    descriptionKey: 'feature.recycle.description',
+    highlightKey: 'feature.recycle.highlight',
     icon: Archive,
     category: 'cleanup',
-    highlight: 'Empty when ready',
   },
   {
     id: 'browser',
-    title: 'Browser Cache',
-    description: 'Free space from Chrome, Edge, Firefox, and Safari cached data in a single pass.',
+    titleKey: 'feature.browser.title',
+    descriptionKey: 'feature.browser.description',
+    highlightKey: 'feature.browser.highlight',
     icon: AppWindow,
     category: 'cleanup',
-    highlight: 'Multi-browser',
   },
   {
     id: 'system-cache',
-    title: 'System Cache',
-    description: 'Clean thumbnail caches, update downloads, and system network caches safely.',
+    titleKey: 'feature.system-cache.title',
+    descriptionKey: 'feature.system-cache.description',
+    highlightKey: 'feature.system-cache.highlight',
     icon: Layers,
     category: 'cleanup',
-    highlight: 'System caches',
   },
   {
     id: 'disk',
-    title: 'Storage Overview',
-    description: 'See drive capacity, used space, and folder breakdowns with clear storage health.',
+    titleKey: 'feature.disk.title',
+    descriptionKey: 'feature.disk.description',
+    highlightKey: 'feature.disk.highlight',
     icon: HardDrive,
     category: 'storage',
-    highlight: 'Disk analysis',
   },
   {
     id: 'large-files',
-    title: 'Large Files',
-    description: 'Surface files over 100 MB, sort by size, and reclaim space with precision.',
+    titleKey: 'feature.large-files.title',
+    descriptionKey: 'feature.large-files.description',
+    highlightKey: 'feature.large-files.highlight',
     icon: FileSearch,
     category: 'storage',
-    highlight: '100 MB+',
   },
   {
     id: 'duplicates',
-    title: 'Duplicate Files',
-    description: 'Find identical copies across your drives and keep only what you need.',
+    titleKey: 'feature.duplicates.title',
+    descriptionKey: 'feature.duplicates.description',
+    highlightKey: 'feature.duplicates.highlight',
     icon: Copy,
     category: 'storage',
-    highlight: 'Keep or delete',
   },
   {
     id: 'boost',
-    title: 'Performance Boost',
-    description:
-      'Boost Now clears reclaimable clutter, flushes DNS, and frees resources in one action.',
+    titleKey: 'feature.boost.title',
+    descriptionKey: 'feature.boost.description',
+    highlightKey: 'feature.boost.highlight',
     icon: Zap,
     category: 'performance',
-    highlight: 'Boost Now',
   },
   {
     id: 'startup',
-    title: 'Startup Apps',
-    description: 'Enable or disable apps that launch at sign-in and cut unnecessary boot load.',
+    titleKey: 'feature.startup.title',
+    descriptionKey: 'feature.startup.description',
+    highlightKey: 'feature.startup.highlight',
     icon: Rocket,
     category: 'performance',
-    highlight: 'Faster boot',
   },
   {
     id: 'background',
-    title: 'Background Apps',
-    description: 'See live CPU and memory use, then stop safe processes that slow you down.',
+    titleKey: 'feature.background.title',
+    descriptionKey: 'feature.background.description',
+    highlightKey: 'feature.background.highlight',
     icon: Cpu,
     category: 'performance',
-    highlight: 'Live process list',
   },
   {
     id: 'monitoring',
-    title: 'Monitoring',
-    description: 'Watch live CPU and memory graphs with Normal, Warning, and Critical levels.',
+    titleKey: 'feature.monitoring.title',
+    descriptionKey: 'feature.monitoring.description',
+    highlightKey: 'feature.monitoring.highlight',
     icon: Activity,
     category: 'insights',
-    highlight: 'Live graphs',
   },
   {
     id: 'reports',
-    title: 'Reports',
-    description:
-      'Track lifetime space reclaimed, issues resolved, boosts, and 7-day optimization trends.',
+    titleKey: 'feature.reports.title',
+    descriptionKey: 'feature.reports.description',
+    highlightKey: 'feature.reports.highlight',
     icon: BarChart3,
     category: 'insights',
-    highlight: 'Lifetime insights',
   },
 ]
 
 export const howItWorks = [
   {
     step: 1,
-    title: 'Download',
-    description: 'Get EdaCleaner for Windows, macOS, or Linux in seconds.',
+    titleKey: 'how.1.title' as const,
+    descriptionKey: 'how.1.description' as const,
     icon: BadgeCheck,
   },
   {
     step: 2,
-    title: 'Install',
-    description: 'Lightweight setup with a clean, familiar desktop experience.',
+    titleKey: 'how.2.title' as const,
+    descriptionKey: 'how.2.description' as const,
     icon: Monitor,
   },
   {
     step: 3,
-    title: 'Scan',
-    description: 'One-click Smart Scan finds junk, duplicates, and boot bottlenecks.',
+    titleKey: 'how.3.title' as const,
+    descriptionKey: 'how.3.description' as const,
     icon: Radar,
   },
   {
     step: 4,
-    title: 'Clean',
-    description: 'Review safe recommendations, then optimize with confidence.',
+    titleKey: 'how.4.title' as const,
+    descriptionKey: 'how.4.description' as const,
     icon: Sparkles,
   },
   {
     step: 5,
-    title: 'Enjoy a Faster PC',
-    description: 'More free space, snappier boots, and smoother everyday performance.',
+    titleKey: 'how.5.title' as const,
+    descriptionKey: 'how.5.description' as const,
     icon: Gauge,
   },
 ]
 
 export const comparisons = [
-  { label: 'Boot Time', before: 82, after: 34, unit: 's', beforeLabel: '82s', afterLabel: '34s' },
   {
-    label: 'Memory Usage',
+    labelKey: 'comparison.boot' as const,
+    before: 82,
+    after: 34,
+    unit: 's',
+    beforeLabel: '82s',
+    afterLabel: '34s',
+  },
+  {
+    labelKey: 'comparison.memory' as const,
     before: 78,
     after: 52,
     unit: '%',
@@ -223,7 +232,7 @@ export const comparisons = [
     afterLabel: '52%',
   },
   {
-    label: 'Disk Space Used',
+    labelKey: 'comparison.disk' as const,
     before: 91,
     after: 68,
     unit: '%',
@@ -231,7 +240,7 @@ export const comparisons = [
     afterLabel: '68%',
   },
   {
-    label: 'Startup Apps',
+    labelKey: 'comparison.startup' as const,
     before: 86,
     after: 40,
     unit: '',
@@ -239,7 +248,7 @@ export const comparisons = [
     afterLabel: '9 apps',
   },
   {
-    label: 'Junk Files',
+    labelKey: 'comparison.junk' as const,
     before: 88,
     after: 12,
     unit: '',
@@ -252,158 +261,153 @@ export type PlanId = 'free' | 'pro' | 'premium'
 
 export type PricingPlan = {
   id: PlanId
-  name: string
-  description: string
-  cta: string
+  nameKey: TranslationKey
+  descriptionKey: TranslationKey
+  ctaKey: TranslationKey
   href: string
   highlighted?: boolean
-  badge?: string
-  /** Annual price in USD (billed yearly) */
+  badgeKey?: TranslationKey
   yearlyPrice: number
-  /** Full annual price if billed monthly (for strikethrough) */
   yearlyOriginal?: number
-  /** Monthly price in USD (billed monthly) */
   monthlyPrice: number
-  /** Free forever — no billing cycle */
   forever?: boolean
-  /** Paid plans include a free trial */
   freeTrialDays?: number
-  features: string[]
+  featureKeys: TranslationKey[]
 }
 
 export const pricingPlans: PricingPlan[] = [
   {
     id: 'free',
-    name: 'Free',
+    nameKey: 'pricing.free.name',
     yearlyPrice: 0,
     monthlyPrice: 0,
     forever: true,
-    description: 'Essential cleanup to keep everyday PCs healthy.',
-    cta: 'Download Free',
+    descriptionKey: 'pricing.free.description',
+    ctaKey: 'pricing.free.cta',
     href: '#download',
-    features: [
-      'Smart Scan to find junk fast',
-      'One-click Cleanup',
-      'Junk file removal',
-      'Browser cache cleaning',
-      'System cache cleaning',
+    featureKeys: [
+      'pricing.free.f1',
+      'pricing.free.f2',
+      'pricing.free.f3',
+      'pricing.free.f4',
+      'pricing.free.f5',
     ],
   },
   {
     id: 'pro',
-    name: 'Pro',
+    nameKey: 'pricing.pro.name',
     yearlyPrice: 29,
     monthlyPrice: 3,
     freeTrialDays: 7,
-    description: 'Full optimizer toolkit for power users who want maximum speed.',
-    cta: 'Start 7-day free trial',
+    descriptionKey: 'pricing.pro.description',
+    ctaKey: 'pricing.pro.cta',
     href: '#download',
     highlighted: true,
-    badge: 'Most Popular',
-    features: [
-      'Everything in Free',
-      'Storage overview dashboard',
-      'Large file finder',
-      'Duplicate file cleaner',
-      'Temporary file removal',
+    badgeKey: 'pricing.pro.badge',
+    featureKeys: [
+      'pricing.pro.f1',
+      'pricing.pro.f2',
+      'pricing.pro.f3',
+      'pricing.pro.f4',
+      'pricing.pro.f5',
     ],
   },
   {
     id: 'premium',
-    name: 'Premium',
+    nameKey: 'pricing.premium.name',
     yearlyPrice: 59,
     monthlyPrice: 6,
     freeTrialDays: 7,
-    description: 'Advanced toolkit with performance and monitoring features.',
-    cta: 'Start 7-day free trial',
+    descriptionKey: 'pricing.premium.description',
+    ctaKey: 'pricing.premium.cta',
     href: '#download',
-    features: [
-      'Everything in Pro',
-      'Performance Boost',
-      'Startup app manager',
-      'Background app control',
-      'Cleanup reports',
-      'Live system monitor',
+    featureKeys: [
+      'pricing.premium.f1',
+      'pricing.premium.f2',
+      'pricing.premium.f3',
+      'pricing.premium.f4',
+      'pricing.premium.f5',
+      'pricing.premium.f6',
     ],
   },
 ]
 
 /** Full feature matrix for the pricing comparison table — product features only */
 export const pricingComparison = [
-  { feature: 'Smart Scan', free: true, pro: true, premium: true },
-  { feature: 'Cleanup', free: true, pro: true, premium: true },
-  { feature: 'Junk Files', free: true, pro: true, premium: true },
-  { feature: 'Browser Cache', free: true, pro: true, premium: true },
-  { feature: 'System Cache', free: true, pro: true, premium: true },
-  { feature: 'Storage Overview', free: false, pro: true, premium: true },
-  { feature: 'Large Files', free: false, pro: true, premium: true },
-  { feature: 'Duplicate Files', free: false, pro: true, premium: true },
-  { feature: 'Temporary Files', free: false, pro: true, premium: true },
-  { feature: 'Performance Boost', free: false, pro: false, premium: true },
-  { feature: 'Startup Apps', free: false, pro: false, premium: true },
-  { feature: 'Background Apps', free: false, pro: false, premium: true },
-  { feature: 'Reports', free: false, pro: false, premium: true },
-  { feature: 'Monitor', free: false, pro: false, premium: true },
-  { feature: '7-day free trial', free: false, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.smartScan' as const, free: true, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.cleanup' as const, free: true, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.junk' as const, free: true, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.browser' as const, free: true, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.system' as const, free: true, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.storage' as const, free: false, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.large' as const, free: false, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.duplicates' as const, free: false, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.temp' as const, free: false, pro: true, premium: true },
+  { featureKey: 'pricing.matrix.boost' as const, free: false, pro: false, premium: true },
+  { featureKey: 'pricing.matrix.startup' as const, free: false, pro: false, premium: true },
+  { featureKey: 'pricing.matrix.background' as const, free: false, pro: false, premium: true },
+  { featureKey: 'pricing.matrix.reports' as const, free: false, pro: false, premium: true },
+  { featureKey: 'pricing.matrix.monitor' as const, free: false, pro: false, premium: true },
+  { featureKey: 'pricing.matrix.trial' as const, free: false, pro: true, premium: true },
 ] as const
 
 export const testimonials = [
   {
-    quote:
-      'Smart Scan found almost 14 GB of junk I had no idea was sitting there. Boot time dropped after I cleaned startup apps — feels like a new machine.',
+    id: 1,
+    quoteKey: 'testimonial.1.quote' as const,
+    roleKey: 'testimonial.1.role' as const,
+    companyKey: 'testimonial.1.company' as const,
     name: 'Daniel Okonkwo',
-    role: 'Software Engineer',
-    company: 'Northline Labs',
     rating: 5,
     initials: 'DO',
     tone: 'primary' as const,
   },
   {
-    quote:
-      'I design in Figma all day and my SSD was constantly full. Large File Analyzer made it obvious what to archive. Clean UI, no scary options.',
+    id: 2,
+    quoteKey: 'testimonial.2.quote' as const,
+    roleKey: 'testimonial.2.role' as const,
+    companyKey: 'testimonial.2.company' as const,
     name: 'Sofia Reyes',
-    role: 'Product Designer',
-    company: 'Studio Marlowe',
     rating: 5,
     initials: 'SR',
     tone: 'cyan' as const,
   },
   {
-    quote:
-      'Between Steam downloads and shader caches my C: drive was a mess. EdaCleaner cleared the junk without touching my game libraries. Instant win.',
+    id: 3,
+    quoteKey: 'testimonial.3.quote' as const,
+    roleKey: 'testimonial.3.role' as const,
+    companyKey: 'testimonial.3.company' as const,
     name: 'Marcus Webb',
-    role: 'Gamer',
-    company: 'Competitive PC setup',
     rating: 5,
     initials: 'MW',
     tone: 'violet' as const,
   },
   {
-    quote:
-      '4K timelines chew through temp files fast. I run a scan between projects now and reclaim space in minutes. Pro paid for itself in one week.',
+    id: 4,
+    quoteKey: 'testimonial.4.quote' as const,
+    roleKey: 'testimonial.4.role' as const,
+    companyKey: 'testimonial.4.company' as const,
     name: 'Aisha Rahman',
-    role: 'Video Editor',
-    company: 'Frame & Grain',
     rating: 5,
     initials: 'AR',
     tone: 'success' as const,
   },
   {
-    quote:
-      'We keep a small fleet of office laptops humming. Duplicate Finder and reports mean less IT tickets about “my disk is full.” Simple enough for anyone to run.',
+    id: 5,
+    quoteKey: 'testimonial.5.quote' as const,
+    roleKey: 'testimonial.5.role' as const,
+    companyKey: 'testimonial.5.company' as const,
     name: 'Helen Park',
-    role: 'Business Owner',
-    company: 'Park & Co. Accounting',
     rating: 5,
     initials: 'HP',
     tone: 'primary' as const,
   },
   {
-    quote:
-      'Rolled Pro out to our helpdesk team. Safe defaults, clear risk badges, and centralized reporting for Business are exactly what we needed.',
+    id: 6,
+    quoteKey: 'testimonial.6.quote' as const,
+    roleKey: 'testimonial.6.role' as const,
+    companyKey: 'testimonial.6.company' as const,
     name: 'Chris Delgado',
-    role: 'IT Administrator',
-    company: 'BrightHarbor Health',
     rating: 5,
     initials: 'CD',
     tone: 'cyan' as const,
@@ -412,33 +416,33 @@ export const testimonials = [
 
 export const trustBadges = [
   {
-    title: 'Trusted by Thousands',
-    description: 'Downloads from users who want a faster PC without the risk.',
+    titleKey: 'trust.1.title' as const,
+    descriptionKey: 'trust.1.description' as const,
     icon: 'users' as const,
   },
   {
-    title: 'Secure Download',
-    description: 'Signed installers with verified checksums for every release.',
+    titleKey: 'trust.2.title' as const,
+    descriptionKey: 'trust.2.description' as const,
     icon: 'shield' as const,
   },
   {
-    title: 'Privacy First',
-    description: 'Your personal files stay untouched. Cleanup targets junk only.',
+    titleKey: 'trust.3.title' as const,
+    descriptionKey: 'trust.3.description' as const,
     icon: 'lock' as const,
   },
   {
-    title: 'No Malware',
-    description: 'No bundled adware, toolbars, or sneaky background miners.',
+    titleKey: 'trust.4.title' as const,
+    descriptionKey: 'trust.4.description' as const,
     icon: 'badge' as const,
   },
   {
-    title: 'Regular Updates',
-    description: 'Continuous improvements for Windows, macOS, and Linux.',
+    titleKey: 'trust.5.title' as const,
+    descriptionKey: 'trust.5.description' as const,
     icon: 'refresh' as const,
   },
   {
-    title: 'Windows Compatible',
-    description: 'Built and tested for Windows 10 and Windows 11.',
+    titleKey: 'trust.6.title' as const,
+    descriptionKey: 'trust.6.description' as const,
     icon: 'monitor' as const,
   },
 ]
@@ -453,102 +457,78 @@ export const trustLogos = [
 ]
 
 export const faqs = [
-  {
-    question: 'Is it free?',
-    answer:
-      'Yes. EdaCleaner Free includes Smart Scan, Cleanup, Junk Files, Browser Cache, and System Cache at no cost. Upgrade to Pro for storage tools, or Premium for Performance Boost, Startup Apps, Background Apps, Reports, and Monitor. Paid plans include a 7-day free trial.',
-  },
-  {
-    question: 'Does it support Windows 11?',
-    answer:
-      'Absolutely. EdaCleaner is built for Windows 10 and Windows 11, with native builds for macOS and Linux as well.',
-  },
-  {
-    question: 'Will my files be deleted?',
-    answer:
-      'No. Cleanup targets junk, temps, caches, and optional categories you choose. Personal documents, photos, and projects are left alone, and you confirm before anything is removed.',
-  },
-  {
-    question: 'Can I cancel Pro or Premium?',
-    answer:
-      'Yes. You can cancel anytime before renewal. You keep paid features until the end of your billing period, and Free features remain available after that. Both Pro and Premium include a 7-day free trial.',
-  },
-  {
-    question: 'How often should I clean my PC?',
-    answer:
-      'Most people run Smart Scan weekly or after big installs and downloads. Cleanup and Performance Boost are available whenever your PC starts to feel slow or storage runs low.',
-  },
-  {
-    question: 'Is EdaCleaner safe for work computers?',
-    answer:
-      'Yes. Cleanup uses Safe and Review risk badges before you remove anything, so personal documents and work files stay protected. Premium adds monitoring and reports useful for keeping office PCs healthy.',
-  },
+  { qKey: 'faq.1.q' as const, aKey: 'faq.1.a' as const },
+  { qKey: 'faq.2.q' as const, aKey: 'faq.2.a' as const },
+  { qKey: 'faq.3.q' as const, aKey: 'faq.3.a' as const },
+  { qKey: 'faq.4.q' as const, aKey: 'faq.4.a' as const },
+  { qKey: 'faq.5.q' as const, aKey: 'faq.5.a' as const },
+  { qKey: 'faq.6.q' as const, aKey: 'faq.6.a' as const },
 ]
 
 export const dashboardScreens = [
   {
-    id: 'overview',
-    title: 'Performance Dashboard',
-    description: 'Live health score, reclaimable space, and quick actions.',
-    hotspot: { x: 22, y: 28, label: 'Health score at a glance' },
+    id: 'overview' as const,
+    titleKey: 'showcase.overview.title' as const,
+    descriptionKey: 'showcase.overview.description' as const,
+    hotspot: { x: 22, y: 28, labelKey: 'showcase.overview.hotspot' as const },
   },
   {
-    id: 'smart-scan',
-    title: 'One-Click Smart Scan',
-    description: 'Full-system health check across cleanup, storage, and performance.',
-    hotspot: { x: 68, y: 42, label: 'Scan all areas in one click' },
+    id: 'smart-scan' as const,
+    titleKey: 'showcase.smartScan.title' as const,
+    descriptionKey: 'showcase.smartScan.description' as const,
+    hotspot: { x: 68, y: 42, labelKey: 'showcase.smartScan.hotspot' as const },
   },
   {
-    id: 'startup',
-    title: 'Startup Manager',
-    description: 'Disable heavy apps that drag down boot time.',
-    hotspot: { x: 55, y: 58, label: 'Impact-sorted startup apps' },
+    id: 'startup' as const,
+    titleKey: 'showcase.startup.title' as const,
+    descriptionKey: 'showcase.startup.description' as const,
+    hotspot: { x: 55, y: 58, labelKey: 'showcase.startup.hotspot' as const },
   },
   {
-    id: 'duplicates',
-    title: 'Duplicate Finder',
-    description: 'Identical copies, keep-or-delete with confidence.',
-    hotspot: { x: 40, y: 48, label: 'Review duplicate groups' },
+    id: 'duplicates' as const,
+    titleKey: 'showcase.duplicates.title' as const,
+    descriptionKey: 'showcase.duplicates.description' as const,
+    hotspot: { x: 40, y: 48, labelKey: 'showcase.duplicates.hotspot' as const },
   },
   {
-    id: 'storage',
-    title: 'Disk Analyzer',
-    description: 'See what is using capacity with clear storage health.',
-    hotspot: { x: 72, y: 36, label: 'Folder-level disk breakdown' },
+    id: 'storage' as const,
+    titleKey: 'showcase.storage.title' as const,
+    descriptionKey: 'showcase.storage.description' as const,
+    hotspot: { x: 72, y: 36, labelKey: 'showcase.storage.hotspot' as const },
   },
   {
-    id: 'cleanup',
-    title: 'Cleanup',
-    description: 'Safe categories for junk, temps, caches, and recycle bin.',
-    hotspot: { x: 30, y: 52, label: 'Safe cleanup categories' },
+    id: 'cleanup' as const,
+    titleKey: 'showcase.cleanup.title' as const,
+    descriptionKey: 'showcase.cleanup.description' as const,
+    hotspot: { x: 30, y: 52, labelKey: 'showcase.cleanup.hotspot' as const },
   },
   {
-    id: 'monitoring',
-    title: 'System Health',
-    description: 'Real-time CPU and memory with clear status levels.',
-    hotspot: { x: 60, y: 30, label: 'Live CPU & memory graphs' },
+    id: 'monitoring' as const,
+    titleKey: 'showcase.monitoring.title' as const,
+    descriptionKey: 'showcase.monitoring.description' as const,
+    hotspot: { x: 60, y: 30, labelKey: 'showcase.monitoring.hotspot' as const },
   },
-] as const
+]
 
 export const downloads = [
   {
-    id: 'windows',
-    name: 'Windows',
-    requirement: 'Windows 10 / 11 · x64',
+    id: 'windows' as const,
+    nameKey: 'download.windows.name' as const,
+    requirementKey: 'download.windows.requirement' as const,
     href: '#',
     file: 'EdaCleaner-Setup.exe',
   },
   {
-    id: 'macos',
-    name: 'macOS',
-    requirement: 'macOS 12+ · Apple Silicon & Intel',
+    id: 'macos' as const,
+    nameKey: 'download.macos.name' as const,
+    requirementKey: 'download.macos.requirement' as const,
     href: '#',
     file: 'EdaCleaner.dmg',
   },
   {
-    id: 'linux',
-    name: 'Linux',
-    requirement: 'Ubuntu, Debian, Fedora & more · x64',
+    id: 'linux' as const,
+    nameKey: 'download.linux.name' as const,
+    requirementKey: 'download.linux.requirement' as const,
     href: '#',
     file: 'EdaCleaner.deb',
   },
@@ -559,19 +539,36 @@ export const linuxDownloadFormats = [
   {
     installerType: 'deb',
     label: '.deb',
-    hint: 'Ubuntu / Debian',
+    hintKey: 'download.linux.debHint' as const,
     file: 'EdaCleaner-linux-x64.deb',
   },
   {
     installerType: 'rpm',
     label: '.rpm',
-    hint: 'Fedora / RHEL',
+    hintKey: 'download.linux.rpmHint' as const,
     file: 'EdaCleaner-linux-x64.rpm',
   },
   {
     installerType: 'appimage',
     label: 'AppImage',
-    hint: 'Portable',
+    hintKey: 'download.linux.appimageHint' as const,
     file: 'EdaCleaner-linux-x64.AppImage',
   },
+] as const
+
+export const navItems = [
+  { labelKey: 'nav.features' as const, href: '#features' },
+  { labelKey: 'nav.howItWorks' as const, href: '#how-it-works' },
+  { labelKey: 'nav.pricing' as const, href: '#pricing' },
+  { labelKey: 'nav.faq' as const, href: '#faq' },
+] as const
+
+export const footerLinks = [
+  { labelKey: 'nav.features' as const, href: '#features' },
+  { labelKey: 'nav.howItWorks' as const, href: '#how-it-works' },
+  { labelKey: 'nav.pricing' as const, href: '#pricing' },
+  { labelKey: 'nav.testimonials' as const, href: '#testimonials' },
+  { labelKey: 'nav.trust' as const, href: '#trust' },
+  { labelKey: 'nav.faq' as const, href: '#faq' },
+  { labelKey: 'nav.download' as const, href: '#download' },
 ] as const

@@ -1,6 +1,7 @@
 export const siteConfig = {
   name: 'EdaCleaner',
   shortName: 'EDA Cleaner',
+  /** Canonical English metadata (UI copy lives in i18n locales). */
   tagline: 'Cleaner storage · smarter scans · smoother performance',
   description:
     'EdaCleaner is a premium PC cleaner and optimizer for Windows, macOS, and Linux — free disk space, boost performance, and keep your system running like new.',
@@ -8,8 +9,6 @@ export const siteConfig = {
   locale: 'en_US',
   download: {
     windows: '#download',
-    label: 'Download for Windows',
-    secondaryLabel: 'Free download',
   },
   /** Custom scheme registered by the EDA Cleaner desktop app. */
   desktopDeepLink: {
@@ -21,13 +20,6 @@ export const siteConfig = {
     twitter: '',
     github: '',
   },
-  nav: [
-    { label: 'Features', href: '#features' },
-    { label: 'How it works', href: '#how-it-works' },
-    { label: 'Pricing', href: '#pricing' },
-    { label: 'FAQ', href: '#faq' },
-  ],
 } as const
 
 export type SiteConfig = typeof siteConfig
-export type NavItem = (typeof siteConfig.nav)[number]

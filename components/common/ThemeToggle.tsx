@@ -5,6 +5,7 @@ import { Moon, Sun } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useThemeTransition } from '@/components/layout/ThemeProvider'
 import { useMounted } from '@/hooks/use-mounted'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 interface ThemeToggleProps {
@@ -14,6 +15,7 @@ interface ThemeToggleProps {
 export function ThemeToggle({ className }: ThemeToggleProps) {
   const mounted = useMounted()
   const { resolvedTheme, toggleTheme } = useThemeTransition()
+  const { t } = useTranslation()
   const isDark = resolvedTheme === 'dark'
 
   if (!mounted) {
@@ -22,7 +24,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
         variant="ghost"
         size="icon"
         className={cn('relative', className)}
-        aria-label="Toggle theme"
+        aria-label={t('common.themeToggle')}
         disabled
       >
         <Sun className="size-4 opacity-0" aria-hidden />
@@ -36,7 +38,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       size="icon"
       onClick={toggleTheme}
       className={cn('relative overflow-hidden', className)}
-      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={isDark ? t('common.themeLight') : t('common.themeDark')}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

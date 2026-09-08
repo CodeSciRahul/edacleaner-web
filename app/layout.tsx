@@ -4,7 +4,7 @@ import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { ScrollProgress } from '@/components/common/ScrollProgress'
 import { BackgroundGrid } from '@/components/common/BackgroundGrid'
-import { SkipToContent } from '@/components/common/BackgroundGrid'
+import { SkipLink } from '@/components/common/SkipLink'
 import { FloatingCursor } from '@/components/common/FloatingCursor'
 import { JsonLd } from '@/components/common/JsonLd'
 import { inter } from '@/lib/fonts'
@@ -91,7 +91,7 @@ export default function RootLayout({
       <body className="flex min-h-dvh flex-col font-sans antialiased">
         <JsonLd />
         <Providers>
-          <SkipToContent />
+          <SkipLink />
           <ScrollProgress />
           <BackgroundGrid />
           <FloatingCursor />

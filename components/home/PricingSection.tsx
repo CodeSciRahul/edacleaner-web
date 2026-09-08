@@ -17,6 +17,8 @@ import { SectionHeading } from '@/components/common/SectionHeading'
 import { MotionItem, MotionStagger } from '@/components/common/Motion'
 import { Button } from '@/components/ui/button'
 import { pricingComparison, pricingPlans, type PricingPlan } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
+import type { TranslationKey } from '@/i18n/locales/en'
 import { cn } from '@/lib/utils'
 
 type BillingCycle = 'yearly' | 'monthly'
@@ -41,31 +43,32 @@ const planVisuals: Record<
 
 export function PricingSection() {
   const [billing, setBilling] = useState<BillingCycle>('yearly')
+  const { t } = useTranslation()
 
   return (
     <SectionWrapper id="pricing" className="bg-surface/30">
       <SectionHeading
-        eyebrow="Pricing"
-        title="Simple plans. Clear upgrades."
-        description="Start free, unlock Pro for deeper cleanup, or go Premium for the full toolkit."
+        eyebrow={t('pricing.eyebrow')}
+        title={t('pricing.title')}
+        description={t('pricing.description')}
         className="mb-10"
       />
 
       <div className="mb-10 flex flex-col items-center gap-2.5">
         <div
           role="group"
-          aria-label="Billing cycle"
+          aria-label={t('pricing.billingAria')}
           className="grid w-[min(100%,17.5rem)] grid-cols-2 rounded-full border border-border/80 bg-card p-1 shadow-card"
         >
           <BillingTab
             active={billing === 'yearly'}
             onClick={() => setBilling('yearly')}
-            label="Yearly"
+            label={t('pricing.yearly')}
           />
           <BillingTab
             active={billing === 'monthly'}
             onClick={() => setBilling('monthly')}
-            label="Monthly"
+            label={t('pricing.monthly')}
           />
         </div>
         <p
@@ -74,7 +77,7 @@ export function PricingSection() {
             billing === 'yearly' ? 'text-primary opacity-100' : 'text-muted-foreground opacity-70',
           )}
         >
-          Save up to 20% with yearly billing
+          {t('pricing.saveYearly')}
         </p>
       </div>
 
@@ -88,11 +91,11 @@ export function PricingSection() {
 
       <p className="mt-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-muted-foreground">
         <ShieldCheck className="size-4 shrink-0 text-primary" strokeWidth={2} aria-hidden />
-        <span>7-day free trial on Pro &amp; Premium</span>
+        <span>{t('pricing.trialNote')}</span>
         <span className="hidden text-border sm:inline" aria-hidden>
           ·
         </span>
-        <span>Cancel anytime. No hidden fees.</span>
+        <span>{t('pricing.cancelNote')}</span>
       </p>
 
       <motion.div
@@ -103,31 +106,35 @@ export function PricingSection() {
         className="mt-14 overflow-hidden rounded-2xl border border-border/80 bg-card shadow-card"
       >
         <div className="border-b border-border/70 px-5 py-4 sm:px-6">
-          <h3 className="text-base font-semibold text-foreground">Compare plans</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
-            See exactly what is included in Free, Pro, and Premium.
-          </p>
+          <h3 className="text-base font-semibold text-foreground">{t('pricing.compareTitle')}</h3>
+          <p className="mt-1 text-sm text-muted-foreground">{t('pricing.compareDescription')}</p>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] text-left text-sm">
             <thead>
               <tr className="border-b border-border/70 bg-muted/40">
-                <th className="px-5 py-3.5 font-medium text-muted-foreground sm:px-6">Feature</th>
-                <th className="px-3 py-3.5 text-center font-semibold text-foreground">Free</th>
-                <th className="px-3 py-3.5 text-center font-semibold text-primary">Pro</th>
+                <th className="px-5 py-3.5 font-medium text-muted-foreground sm:px-6">
+                  {t('pricing.featureCol')}
+                </th>
+                <th className="px-3 py-3.5 text-center font-semibold text-foreground">
+                  {t('pricing.free.name')}
+                </th>
+                <th className="px-3 py-3.5 text-center font-semibold text-primary">
+                  {t('pricing.pro.name')}
+                </th>
                 <th className="px-3 py-3.5 text-center font-semibold text-foreground sm:pr-6">
-                  Premium
+                  {t('pricing.premium.name')}
                 </th>
               </tr>
             </thead>
             <tbody>
               {pricingComparison.map((row) => (
                 <tr
-                  key={row.feature}
+                  key={row.featureKey}
                   className="border-b border-border/50 last:border-0 hover:bg-accent/40"
                 >
-                  <td className="px-5 py-3.5 text-foreground/90 sm:px-6">{row.feature}</td>
+                  <td className="px-5 py-3.5 text-foreground/90 sm:px-6">{t(row.featureKey)}</td>
                   <td className="px-3 py-3.5">
                     <CompareCell included={row.free} />
                   </td>
@@ -174,6 +181,7 @@ function BillingTab({
 }
 
 function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle }) {
+  const { t } = useTranslation()
   const isYearly = billing === 'yearly'
   const showTrial = Boolean(plan.freeTrialDays)
   const savings =
@@ -202,7 +210,6 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
           : 'border-border/80 shadow-card hover:border-primary/30 hover:shadow-card-hover',
       )}
     >
-      {/* Top accent wash */}
       <div
         aria-hidden
         className={cn(
@@ -222,7 +229,7 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
 
       {plan.highlighted ? (
         <span className="absolute left-1/2 top-0 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-primary px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary-foreground shadow-glow">
-          {plan.badge ?? 'Most Popular'}
+          {t(plan.badgeKey ?? 'pricing.mostPopular')}
         </span>
       ) : null}
 
@@ -240,19 +247,19 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
         {showTrial ? (
           <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
             <Gauge className="size-3" strokeWidth={2.5} aria-hidden />
-            {plan.freeTrialDays}-day trial
+            {t('pricing.dayTrial', { days: plan.freeTrialDays ?? 7 })}
           </span>
         ) : (
           <span className="inline-flex items-center rounded-full border border-border/70 bg-muted/50 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
-            Forever free
+            {t('pricing.foreverFree')}
           </span>
         )}
       </div>
 
       <div className="relative mt-4">
-        <h3 className="text-xl font-semibold tracking-tight text-foreground">{plan.name}</h3>
+        <h3 className="text-xl font-semibold tracking-tight text-foreground">{t(plan.nameKey)}</h3>
         <p className="mt-1.5 min-h-[2.5rem] text-sm leading-relaxed text-muted-foreground">
-          {plan.description}
+          {t(plan.descriptionKey)}
         </p>
       </div>
 
@@ -274,31 +281,31 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
             className="flex flex-col"
           >
             {plan.forever ? (
-              <PriceRow amount={0} period="forever" />
+              <PriceRow amount={0} periodKey="pricing.period.forever" />
             ) : isYearly ? (
               <>
                 <PriceRow
                   amount={plan.yearlyPrice}
-                  period="year"
+                  periodKey="pricing.period.year"
                   original={showStrike ? plan.yearlyOriginal : undefined}
                 />
                 <div className="mt-2.5 flex flex-wrap items-center gap-2">
                   <span className="inline-flex rounded-md bg-primary/15 px-2.5 py-1 text-xs font-semibold tabular-nums text-primary">
-                    ${plan.monthlyPrice}/mo
+                    {t('pricing.perMonth', { amount: plan.monthlyPrice })}
                   </span>
                   {showStrike ? (
                     <span className="inline-flex rounded-md bg-success/15 px-2.5 py-1 text-xs font-semibold text-success">
-                      Save {savingsPct}%
+                      {t('pricing.savePct', { pct: savingsPct })}
                     </span>
                   ) : null}
                 </div>
               </>
             ) : (
               <>
-                <PriceRow amount={plan.monthlyPrice} period="month" />
+                <PriceRow amount={plan.monthlyPrice} periodKey="pricing.period.month" />
                 {showTrial ? (
                   <p className="mt-2.5 text-xs font-medium text-muted-foreground">
-                    Cancel anytime · No commitment
+                    {t('pricing.cancelAnytime')}
                   </p>
                 ) : null}
               </>
@@ -308,15 +315,15 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
       </div>
 
       <p className="relative mt-5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-        What&apos;s included
+        {t('pricing.whatsIncluded')}
       </p>
       <ul className="relative mt-3 flex-1 space-y-2.5">
-        {plan.features.map((feature) => (
-          <li key={feature} className="flex gap-2.5 text-sm text-foreground/90">
+        {plan.featureKeys.map((featureKey) => (
+          <li key={featureKey} className="flex gap-2.5 text-sm text-foreground/90">
             <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
               <Check className="size-3" strokeWidth={3} aria-hidden />
             </span>
-            <span className="leading-snug">{feature}</span>
+            <span className="leading-snug">{t(featureKey)}</span>
           </li>
         ))}
       </ul>
@@ -328,13 +335,11 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
           size="lg"
           className="w-full"
         >
-          <Link href={plan.href}>{plan.cta}</Link>
+          <Link href={plan.href}>{t(plan.ctaKey)}</Link>
         </Button>
         <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">
           <ShieldCheck className="size-3.5 shrink-0 text-primary" strokeWidth={2} aria-hidden />
-          {plan.forever
-            ? 'No credit card required'
-            : 'Cancel anytime · Instant access'}
+          {plan.forever ? t('pricing.noCard') : t('pricing.instantAccess')}
         </p>
       </div>
     </motion.article>
@@ -343,19 +348,20 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
 
 function PriceRow({
   amount,
-  period,
+  periodKey,
   original,
 }: {
   amount: number
-  period: string
+  periodKey: TranslationKey
   original?: number
 }) {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
       <span className="text-[2.5rem] font-bold leading-none tracking-tight tabular-nums text-foreground sm:text-[2.75rem]">
         ${amount}
       </span>
-      <span className="text-sm text-muted-foreground">/ {period}</span>
+      <span className="text-sm text-muted-foreground">/ {t(periodKey)}</span>
       {typeof original === 'number' ? (
         <span className="text-sm tabular-nums text-muted-foreground/55 line-through">
           ${original}
@@ -372,16 +378,21 @@ function CompareCell({
   included: boolean
   highlight?: boolean
 }) {
+  const { t } = useTranslation()
   return (
     <span className="flex justify-center">
       {included ? (
         <Check
           className={cn('size-4', highlight ? 'text-primary' : 'text-success')}
           strokeWidth={2.25}
-          aria-label="Included"
+          aria-label={t('common.included')}
         />
       ) : (
-        <Minus className="size-4 text-muted-foreground/40" strokeWidth={2} aria-label="Not included" />
+        <Minus
+          className="size-4 text-muted-foreground/40"
+          strokeWidth={2}
+          aria-label={t('common.notIncluded')}
+        />
       )}
     </span>
   )

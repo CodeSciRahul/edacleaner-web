@@ -4,14 +4,17 @@ import { motion } from 'framer-motion'
 import { SectionWrapper } from '@/components/common/SectionWrapper'
 import { SectionHeading } from '@/components/common/SectionHeading'
 import { howItWorks } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 
 export function HowItWorksSection() {
+  const { t } = useTranslation()
+
   return (
     <SectionWrapper id="how-it-works" className="bg-surface/30">
       <SectionHeading
-        eyebrow="How it works"
-        title="From download to a faster PC in five steps"
-        description="A simple path designed so anyone can optimize their machine with confidence."
+        eyebrow={t('how.eyebrow')}
+        title={t('how.title')}
+        description={t('how.description')}
         className="mb-14"
       />
 
@@ -42,10 +45,14 @@ export function HowItWorksSection() {
                 </div>
                 <div className="flex-1 rounded-xl border border-border/80 bg-card p-4 shadow-card sm:p-5">
                   <span className="text-[11px] font-semibold uppercase tracking-wide text-primary">
-                    Step {step.step}
+                    {t('common.step', { step: step.step })}
                   </span>
-                  <h3 className="mt-1 text-lg font-semibold text-foreground">{step.title}</h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground">{step.description}</p>
+                  <h3 className="mt-1 text-lg font-semibold text-foreground">
+                    {t(step.titleKey)}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    {t(step.descriptionKey)}
+                  </p>
                 </div>
               </motion.li>
             )

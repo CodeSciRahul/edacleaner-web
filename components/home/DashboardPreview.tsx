@@ -11,9 +11,11 @@ import { DashboardMock } from '@/components/common/DashboardMock'
 import { GradientBlob } from '@/components/common/GradientBlob'
 import { Button } from '@/components/ui/button'
 import { dashboardScreens } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 
 export function DashboardPreview() {
+  const { t } = useTranslation()
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' })
   const [index, setIndex] = useState(0)
 
@@ -39,9 +41,9 @@ export function DashboardPreview() {
       <GradientBlob className="-right-16 bottom-10 opacity-40" tone="cyan" size="md" delay={2} />
 
       <SectionHeading
-        eyebrow="Product tour"
-        title="See EdaCleaner in action"
-        description="Explore the same premium interface you get on the desktop — from Smart Scan to Startup Manager."
+        eyebrow={t('showcase.eyebrow')}
+        title={t('showcase.title')}
+        description={t('showcase.description')}
         className="mb-10"
       />
 
@@ -58,7 +60,7 @@ export function DashboardPreview() {
                 : 'border-border/70 bg-card/60 text-muted-foreground hover:border-border hover:text-foreground',
             )}
           >
-            {s.title}
+            {t(s.titleKey)}
           </button>
         ))}
       </div>
@@ -72,9 +74,16 @@ export function DashboardPreview() {
                   whileHover={{ y: -4 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 24 }}
                 >
-                  <MacWindow title={`EDA Cleaner — ${s.title}`} className="relative shadow-glow">
+                  <MacWindow
+                    title={`EDA Cleaner — ${t(s.titleKey)}`}
+                    className="relative shadow-glow"
+                  >
                     <DashboardMock screen={s.id} />
-                    <Hotspot x={s.hotspot.x} y={s.hotspot.y} label={s.hotspot.label} />
+                    <Hotspot
+                      x={s.hotspot.x}
+                      y={s.hotspot.y}
+                      label={t(s.hotspot.labelKey)}
+                    />
                   </MacWindow>
                 </motion.div>
               </div>
@@ -86,7 +95,7 @@ export function DashboardPreview() {
           <Button
             variant="outline"
             size="icon"
-            aria-label="Previous screen"
+            aria-label={t('common.previousScreen')}
             onClick={() => emblaApi?.scrollPrev()}
           >
             <ChevronLeft strokeWidth={1.75} />
@@ -100,14 +109,14 @@ export function DashboardPreview() {
               transition={{ duration: 0.3 }}
               className="min-w-[200px] text-center"
             >
-              <p className="text-sm font-semibold text-foreground">{screen.title}</p>
-              <p className="mt-1 text-xs text-muted-foreground">{screen.description}</p>
+              <p className="text-sm font-semibold text-foreground">{t(screen.titleKey)}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{t(screen.descriptionKey)}</p>
             </motion.div>
           </AnimatePresence>
           <Button
             variant="outline"
             size="icon"
-            aria-label="Next screen"
+            aria-label={t('common.nextScreen')}
             onClick={() => emblaApi?.scrollNext()}
           >
             <ChevronRight strokeWidth={1.75} />

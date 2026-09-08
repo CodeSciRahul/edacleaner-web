@@ -12,12 +12,14 @@ import { DashboardMock } from '@/components/common/DashboardMock'
 import { Magnetic } from '@/components/common/Magnetic'
 import { siteConfig } from '@/constants/site'
 import { heroFloatCards } from '@/constants/content'
+import { useTranslation } from '@/i18n/useTranslation'
 import { cn } from '@/lib/utils'
 import { getBoundingRect } from '@/lib/dom'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { useLenis } from '@/components/layout/SmoothScroll'
 
 export function HeroSection() {
+  const { t } = useTranslation()
   const reduced = useReducedMotion()
   const { scrollTo } = useLenis()
   const mx = useMotionValue(0)
@@ -69,7 +71,7 @@ export function HeroSection() {
             transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="text-hero text-foreground text-balance"
           >
-            Your PC can become dramatically faster — with one click.
+            {t('hero.title')}
           </motion.h1>
 
           <motion.p
@@ -78,8 +80,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
             className="mt-5 text-hero-sub text-muted-foreground text-pretty"
           >
-            EdaCleaner scans junk, frees disk space, optimizes startup, and boosts performance
-            across Windows, macOS, and Linux.
+            {t('hero.subtitle')}
           </motion.p>
 
           <motion.div
@@ -96,11 +97,11 @@ export function HeroSection() {
                 onClick={() => scrollTo('#download')}
               >
                 <Download strokeWidth={1.75} />
-                {siteConfig.download.label}
+                {t('site.downloadLabel')}
               </Button>
             </Magnetic>
             <Button variant="outline" size="xl" onClick={() => scrollTo('#features')}>
-              View Features
+              {t('common.viewFeatures')}
               <ArrowRight strokeWidth={1.75} />
             </Button>
           </motion.div>
@@ -111,7 +112,7 @@ export function HeroSection() {
             transition={{ delay: 0.45, duration: 0.5 }}
             className="mt-4 text-xs text-muted-foreground"
           >
-            Free plan available · No credit card required
+            {t('hero.footnote')}
           </motion.p>
         </div>
 
@@ -131,7 +132,7 @@ export function HeroSection() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
             >
-              <MacWindow title="EDA Cleaner — Overview" className="shadow-glow">
+              <MacWindow title={t('hero.windowTitle')} className="shadow-glow">
                 <DashboardMock screen="overview" />
               </MacWindow>
             </motion.div>
@@ -156,7 +157,7 @@ export function HeroSection() {
 
             return (
               <motion.div
-                key={card.label}
+                key={card.labelKey}
                 style={reduced ? undefined : { x: cardX, y: cardY }}
                 initial={{ opacity: 0, scale: 0.9, y: 16 }}
                 animate={{
@@ -188,7 +189,7 @@ export function HeroSection() {
                 </span>
                 <span>
                   <span className="block text-[10px] font-medium text-muted-foreground">
-                    {card.label}
+                    {t(card.labelKey)}
                   </span>
                   <span className="block text-sm font-semibold text-foreground tabular-nums">
                     {card.value}
