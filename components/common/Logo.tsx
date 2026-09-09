@@ -38,6 +38,7 @@ export function Logo({ className, showWordmark = true, size = 'md' }: LogoProps)
         transition={{ type: 'spring', stiffness: 400, damping: 24 }}
       >
         {/* SVG stays crisp on high-DPI; prefer native img over next/image for SVG marks */}
+        {/* eslint-disable-next-line @next/next/no-img-element -- SVG brand mark */}
         <img
           src="/brand/app-icon.svg"
           alt=""
