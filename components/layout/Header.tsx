@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Download, Menu, X } from 'lucide-react'
 import { Logo } from '@/components/common/Logo'
@@ -18,9 +19,16 @@ import { cn } from '@/lib/utils'
 
 const NAV_IDS = navItems.map((n) => n.href.replace('#', ''))
 
+function sectionExists(hash: string): boolean {
+  if (typeof document === 'undefined') return false
+  const id = hash.startsWith('#') ? hash.slice(1) : hash
+  return Boolean(id && document.getElementById(id))
+}
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
   const active = useActiveSection(NAV_IDS)
   const { progress, scrollTo } = useLenis()
   const { t } = useTranslation()
@@ -38,7 +46,16 @@ export function Header() {
 
   const go = (href: string) => {
     setOpen(false)
-    scrollTo(href)
+    const hash = href.startsWith('#') ? href : `#${href}`
+
+    // Off the marketing home page (e.g. /pricing checkout return), hash targets
+    // are missing — go to the home section instead of a no-op scroll.
+    if (pathname !== '/' || !sectionExists(hash)) {
+      window.location.assign(`/${hash}`)
+      return
+    }
+
+    scrollTo(hash)
   }
 
   return (

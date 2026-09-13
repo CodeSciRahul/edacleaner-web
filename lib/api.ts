@@ -39,18 +39,40 @@ export interface DownloadPayload {
   expiresIn: number
 }
 
+export type PlanSlug = 'free' | 'pro' | 'premium'
+export type BillingInterval = 'month' | 'year'
+
+export interface PublicPlan {
+  id: string
+  name: string
+  slug: PlanSlug | string
+  monthlyPrice: number
+  currency: string
+  billingInterval: BillingInterval | string
+  features: string[]
+  isTrialAvailable: boolean
+  trialDays: number
+  priceDisplay: number
+  compareAtPriceDisplay: number | null
+  discountPercent: number
+  savingsDisplay: number | null
+}
+
+export interface GuestCheckoutResult {
+  mode: 'checkout'
+  sessionId: string
+  url: string | null
+  publishableKey?: string
+  guest?: boolean
+}
+
 interface ApiSuccess<T> {
   success: boolean
   message?: string
   data: T
 }
 
-async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(`${getApiBaseUrl()}${path}`, {
-    headers: { Accept: 'application/json' },
-    cache: 'no-store',
-  })
-
+async function parseApiResponse<T>(res: Response): Promise<T> {
   const json = (await res.json()) as ApiSuccess<T> & { message?: string }
 
   if (!res.ok || !json.success) {
@@ -60,8 +82,63 @@ async function apiGet<T>(path: string): Promise<T> {
   return json.data
 }
 
+async function apiGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${getApiBaseUrl()}${path}`, {
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+  })
+
+  return parseApiResponse<T>(res)
+}
+
+async function apiPost<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${getApiBaseUrl()}${path}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+    cache: 'no-store',
+  })
+
+  return parseApiResponse<T>(res)
+}
+
 export function fetchLatestVersion(): Promise<LatestVersion> {
   return apiGet<LatestVersion>('/versions/latest')
+}
+
+export function fetchPlans(): Promise<PublicPlan[]> {
+  return apiGet<PublicPlan[]>('/plans')
+}
+
+export function createGuestCheckout(planId: string): Promise<GuestCheckoutResult> {
+  return apiPost<GuestCheckoutResult>('/subscription/guest-checkout', { planId })
+}
+
+/** Resolve active paid plan Mongo id for slug + billing cycle, then open Stripe Checkout. */
+export async function startGuestCheckout(input: {
+  slug: Exclude<PlanSlug, 'free'>
+  billingInterval: BillingInterval
+}): Promise<string> {
+  const plans = await fetchPlans()
+  const plan = plans.find(
+    (p) => p.slug === input.slug && p.billingInterval === input.billingInterval,
+  )
+
+  if (!plan?.id) {
+    throw new Error('Selected plan is unavailable')
+  }
+
+  const checkout = await createGuestCheckout(plan.id)
+  const url = typeof checkout.url === 'string' ? checkout.url.trim() : ''
+
+  if (!url || (!url.startsWith('https://') && !url.startsWith('http://'))) {
+    throw new Error('Checkout redirect URL is missing')
+  }
+
+  return url
 }
 
 export function fetchDownloadUrl(input: {

@@ -9,6 +9,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { usePathname } from 'next/navigation'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
@@ -30,6 +31,7 @@ export function useLenis() {
 }
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
+  const pathname = usePathname()
   const reducedMotion = useReducedMotion()
   const [lenis, setLenis] = useState<Lenis | null>(null)
   const [progress, setProgress] = useState(0)
@@ -96,6 +98,33 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     },
     [lenis],
   )
+
+  // Next.js client navigations to /#section often skip native hash scroll.
+  useEffect(() => {
+    if (pathname !== '/') return
+
+    const hash = typeof window !== 'undefined' ? window.location.hash : ''
+    if (!hash || hash.length < 2) return
+
+    let cancelled = false
+    const tryScroll = (attempt: number) => {
+      if (cancelled) return
+      const el = document.querySelector(hash)
+      if (el) {
+        scrollTo(hash)
+        return
+      }
+      if (attempt < 8) {
+        window.setTimeout(() => tryScroll(attempt + 1), 50)
+      }
+    }
+
+    const timer = window.setTimeout(() => tryScroll(0), 40)
+    return () => {
+      cancelled = true
+      window.clearTimeout(timer)
+    }
+  }, [pathname, scrollTo, lenis])
 
   const value = useMemo(
     () => ({ lenis, scrollTo, progress }),

@@ -7,6 +7,7 @@ import {
   Check,
   Crown,
   Gauge,
+  Loader2,
   Minus,
   ShieldCheck,
   Sparkles,
@@ -19,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { pricingComparison, pricingPlans, type PricingPlan } from '@/constants/content'
 import { useTranslation } from '@/i18n/useTranslation'
 import type { TranslationKey } from '@/i18n/locales/en'
+import { startGuestCheckout } from '@/lib/api'
 import { cn } from '@/lib/utils'
 
 type BillingCycle = 'yearly' | 'monthly'
@@ -182,7 +184,10 @@ function BillingTab({
 
 function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle }) {
   const { t } = useTranslation()
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const isYearly = billing === 'yearly'
+  const isPaidPlan = plan.id === 'pro' || plan.id === 'premium'
   const showTrial = Boolean(plan.freeTrialDays)
   const savings =
     isYearly && typeof plan.yearlyOriginal === 'number'
@@ -196,6 +201,24 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
 
   const visual = planVisuals[plan.id]
   const Icon = visual.icon
+
+  async function handlePurchase() {
+    if (!isPaidPlan || checkoutLoading) return
+
+    setCheckoutError(null)
+    setCheckoutLoading(true)
+
+    try {
+      const url = await startGuestCheckout({
+        slug: plan.id,
+        billingInterval: isYearly ? 'year' : 'month',
+      })
+      window.location.assign(url)
+    } catch {
+      setCheckoutError(t('pricing.checkoutError'))
+      setCheckoutLoading(false)
+    }
+  }
 
   return (
     <motion.article
@@ -329,18 +352,46 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
       </ul>
 
       <div className="relative mt-7 space-y-2.5">
-        <Button
-          asChild
-          variant={plan.highlighted ? 'glow' : plan.forever ? 'outline' : 'default'}
-          size="lg"
-          className="w-full"
-        >
-          <Link href={plan.href}>{t(plan.ctaKey)}</Link>
-        </Button>
-        <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">
-          <ShieldCheck className="size-3.5 shrink-0 text-primary" strokeWidth={2} aria-hidden />
-          {plan.forever ? t('pricing.noCard') : t('pricing.instantAccess')}
-        </p>
+        {isPaidPlan ? (
+          <Button
+            type="button"
+            variant={plan.highlighted ? 'glow' : 'default'}
+            size="lg"
+            className="w-full"
+            disabled={checkoutLoading}
+            onClick={() => {
+              void handlePurchase()
+            }}
+          >
+            {checkoutLoading ? (
+              <>
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+                {t('pricing.checkoutRedirecting')}
+              </>
+            ) : (
+              t(plan.ctaKey)
+            )}
+          </Button>
+        ) : (
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className="w-full"
+          >
+            <Link href={plan.href}>{t(plan.ctaKey)}</Link>
+          </Button>
+        )}
+        {checkoutError ? (
+          <p className="text-center text-[11px] text-red-600 dark:text-red-400" role="alert">
+            {checkoutError}
+          </p>
+        ) : (
+          <p className="flex items-center justify-center gap-1.5 text-center text-[11px] text-muted-foreground">
+            <ShieldCheck className="size-3.5 shrink-0 text-primary" strokeWidth={2} aria-hidden />
+            {plan.forever ? t('pricing.noCard') : t('pricing.instantAccess')}
+          </p>
+        )}
       </div>
     </motion.article>
   )

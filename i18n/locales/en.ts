@@ -229,6 +229,8 @@ export const en = {
   'pricing.dayTrial': '{{days}}-day trial',
   'pricing.foreverFree': 'Forever free',
   'pricing.mostPopular': 'Most Popular',
+  'pricing.checkoutRedirecting': 'Redirecting to checkout…',
+  'pricing.checkoutError': 'Could not start checkout. Please try again.',
 
   'pricing.free.name': 'Free',
   'pricing.free.description': 'Essential cleanup to keep everyday PCs healthy.',
@@ -380,16 +382,25 @@ export const en = {
     'Manage upgrades in the desktop app. Start free, then unlock Pro or Premium when you are ready.',
   'checkout.viewPricing': 'View pricing',
   'checkout.downloadApp': 'Download app',
+  'checkout.successEyebrow': 'You\'re all set',
+  'checkout.cancelEyebrow': 'No charge',
   'checkout.successTitle': 'Payment successful',
   'checkout.cancelTitle': 'Checkout canceled',
   'checkout.successBody':
-    'Your subscription is activating. Open EDA Cleaner and log in with the same checkout email. We send a one-time code if you have not set a password yet.',
+    'Your subscription is activating. Finish setup in the desktop app with the same checkout email.',
   'checkout.cancelBody':
     'No charge was made. You can reopen the desktop app and try again whenever you are ready.',
+  'checkout.stepLabel': 'Step {{n}}',
+  'checkout.stepOpen': 'Open EDA Cleaner on this PC',
+  'checkout.stepLogin': 'Sign in with your checkout email',
+  'checkout.stepUnlock': 'Enter the one-time code to unlock your plan',
   'checkout.launching':
     'We are launching the desktop app. After it opens, log in with your checkout email if you purchased a plan without a password…',
   'checkout.launchFallback':
     'If the app did not open automatically, click the button below. Log in with your checkout email and enter the email code so the paid plan unlocks on this PC.',
+  'checkout.launchingShort': 'Launching the desktop app… allow the browser prompt if it appears.',
+  'checkout.launchFallbackShort':
+    'Didn\'t open? Click again, then allow the browser to open EDA Cleaner.',
   'checkout.cancelHint':
     'Return to EDA Cleaner to stay on Free, or pick another plan later.',
   'checkout.openApp': 'Open EDA Cleaner',
