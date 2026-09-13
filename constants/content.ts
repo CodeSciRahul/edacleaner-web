@@ -271,7 +271,6 @@ export type PricingPlan = {
   yearlyOriginal?: number
   monthlyPrice: number
   forever?: boolean
-  freeTrialDays?: number
   featureKeys: TranslationKey[]
 }
 
@@ -298,7 +297,6 @@ export const pricingPlans: PricingPlan[] = [
     nameKey: 'pricing.pro.name',
     yearlyPrice: 29,
     monthlyPrice: 3,
-    freeTrialDays: 7,
     descriptionKey: 'pricing.pro.description',
     ctaKey: 'pricing.pro.cta',
     href: '#download',
@@ -317,7 +315,6 @@ export const pricingPlans: PricingPlan[] = [
     nameKey: 'pricing.premium.name',
     yearlyPrice: 59,
     monthlyPrice: 6,
-    freeTrialDays: 7,
     descriptionKey: 'pricing.premium.description',
     ctaKey: 'pricing.premium.cta',
     href: '#download',
@@ -348,7 +345,6 @@ export const pricingComparison = [
   { featureKey: 'pricing.matrix.background' as const, free: false, pro: false, premium: true },
   { featureKey: 'pricing.matrix.reports' as const, free: false, pro: false, premium: true },
   { featureKey: 'pricing.matrix.monitor' as const, free: false, pro: false, premium: true },
-  { featureKey: 'pricing.matrix.trial' as const, free: false, pro: true, premium: true },
 ] as const
 
 export const testimonials = [

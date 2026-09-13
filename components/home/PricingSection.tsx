@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Check,
   Crown,
-  Gauge,
   Loader2,
   Minus,
   ShieldCheck,
@@ -93,10 +92,6 @@ export function PricingSection() {
 
       <p className="mt-8 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm text-muted-foreground">
         <ShieldCheck className="size-4 shrink-0 text-primary" strokeWidth={2} aria-hidden />
-        <span>{t('pricing.trialNote')}</span>
-        <span className="hidden text-border sm:inline" aria-hidden>
-          ·
-        </span>
         <span>{t('pricing.cancelNote')}</span>
       </p>
 
@@ -188,7 +183,6 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
   const isYearly = billing === 'yearly'
   const isPaidPlan = plan.id === 'pro' || plan.id === 'premium'
-  const showTrial = Boolean(plan.freeTrialDays)
   const savings =
     isYearly && typeof plan.yearlyOriginal === 'number'
       ? plan.yearlyOriginal - plan.yearlyPrice
@@ -267,14 +261,13 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
         >
           <Icon className="size-5" strokeWidth={2.25} />
         </div>
-        {showTrial ? (
-          <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
-            <Gauge className="size-3" strokeWidth={2.5} aria-hidden />
-            {t('pricing.dayTrial', { days: plan.freeTrialDays ?? 7 })}
-          </span>
-        ) : (
+        {plan.forever ? (
           <span className="inline-flex items-center rounded-full border border-border/70 bg-muted/50 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
             {t('pricing.foreverFree')}
+          </span>
+        ) : (
+          <span className="inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-2.5 py-1 text-[11px] font-semibold text-primary">
+            {t('pricing.cancelAnytime')}
           </span>
         )}
       </div>
@@ -326,11 +319,9 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
             ) : (
               <>
                 <PriceRow amount={plan.monthlyPrice} periodKey="pricing.period.month" />
-                {showTrial ? (
-                  <p className="mt-2.5 text-xs font-medium text-muted-foreground">
-                    {t('pricing.cancelAnytime')}
-                  </p>
-                ) : null}
+                <p className="mt-2.5 text-xs font-medium text-muted-foreground">
+                  {t('pricing.cancelAnytime')}
+                </p>
               </>
             )}
           </motion.div>

@@ -212,7 +212,6 @@ export const en = {
   'pricing.yearly': 'Yearly',
   'pricing.monthly': 'Monthly',
   'pricing.saveYearly': 'Save up to 20% with yearly billing',
-  'pricing.trialNote': '7-day free trial on Pro & Premium',
   'pricing.cancelNote': 'Cancel anytime. No hidden fees.',
   'pricing.compareTitle': 'Compare plans',
   'pricing.compareDescription': 'See exactly what is included in Free, Pro, and Premium.',
@@ -226,7 +225,6 @@ export const en = {
   'pricing.whatsIncluded': 'What\'s included',
   'pricing.noCard': 'No credit card required',
   'pricing.instantAccess': 'Cancel anytime · Instant access',
-  'pricing.dayTrial': '{{days}}-day trial',
   'pricing.foreverFree': 'Forever free',
   'pricing.mostPopular': 'Most Popular',
   'pricing.checkoutRedirecting': 'Redirecting to checkout…',
@@ -243,7 +241,7 @@ export const en = {
 
   'pricing.pro.name': 'Pro',
   'pricing.pro.description': 'Full optimizer toolkit for power users who want maximum speed.',
-  'pricing.pro.cta': 'Start 7-day free trial',
+  'pricing.pro.cta': 'Get Pro',
   'pricing.pro.badge': 'Most Popular',
   'pricing.pro.f1': 'Everything in Free',
   'pricing.pro.f2': 'Storage overview dashboard',
@@ -253,7 +251,7 @@ export const en = {
 
   'pricing.premium.name': 'Premium',
   'pricing.premium.description': 'Advanced toolkit with performance and monitoring features.',
-  'pricing.premium.cta': 'Start 7-day free trial',
+  'pricing.premium.cta': 'Get Premium',
   'pricing.premium.f1': 'Everything in Pro',
   'pricing.premium.f2': 'Performance Boost',
   'pricing.premium.f3': 'Startup app manager',
@@ -275,7 +273,6 @@ export const en = {
   'pricing.matrix.background': 'Background Apps',
   'pricing.matrix.reports': 'Reports',
   'pricing.matrix.monitor': 'Monitor',
-  'pricing.matrix.trial': '7-day free trial',
 
   'testimonials.eyebrow': 'Testimonials',
   'testimonials.title': 'Loved by people who live on their PCs',
@@ -330,7 +327,7 @@ export const en = {
   'faq.description': 'Straight answers about pricing, safety, and Windows support.',
   'faq.1.q': 'Is it free?',
   'faq.1.a':
-    'Yes. EdaCleaner Free includes Smart Scan, Cleanup, Junk Files, Browser Cache, and System Cache at no cost. Upgrade to Pro for storage tools, or Premium for Performance Boost, Startup Apps, Background Apps, Reports, and Monitor. Paid plans include a 7-day free trial.',
+    'Yes. EdaCleaner Free includes Smart Scan, Cleanup, Junk Files, Browser Cache, and System Cache at no cost. Upgrade to Pro for storage tools, or Premium for Performance Boost, Startup Apps, Background Apps, Reports, and Monitor.',
   'faq.2.q': 'Does it support Windows 11?',
   'faq.2.a':
     'Absolutely. EdaCleaner is built for Windows 10 and Windows 11, with native builds for macOS and Linux as well.',
@@ -339,7 +336,7 @@ export const en = {
     'No. Cleanup targets junk, temps, caches, and optional categories you choose. Personal documents, photos, and projects are left alone, and you confirm before anything is removed.',
   'faq.4.q': 'Can I cancel Pro or Premium?',
   'faq.4.a':
-    'Yes. You can cancel anytime before renewal. You keep paid features until the end of your billing period, and Free features remain available after that. Both Pro and Premium include a 7-day free trial.',
+    'Yes. You can cancel anytime before renewal. You keep paid features until the end of your billing period, and Free features remain available after that.',
   'faq.5.q': 'How often should I clean my PC?',
   'faq.5.a':
     'Most people run Smart Scan weekly or after big installs and downloads. Cleanup and Performance Boost are available whenever your PC starts to feel slow or storage runs low.',

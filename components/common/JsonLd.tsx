@@ -23,7 +23,6 @@ export function JsonLd() {
         priceCurrency: 'USD',
         name: 'Pro',
         billingIncrement: 'P1Y',
-        description: '7-day free trial',
       },
       {
         '@type': 'Offer',
@@ -31,7 +30,6 @@ export function JsonLd() {
         priceCurrency: 'USD',
         name: 'Premium',
         billingIncrement: 'P1Y',
-        description: '7-day free trial',
       },
     ],
     aggregateRating: {
