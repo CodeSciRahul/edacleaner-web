@@ -197,7 +197,9 @@ function PlanCard({ plan, billing }: { plan: PricingPlan; billing: BillingCycle 
   const Icon = visual.icon
 
   async function handlePurchase() {
-    if (!isPaidPlan || checkoutLoading) return
+    if (checkoutLoading) return
+    // Narrow PlanId so free never reaches paid guest checkout (and TS accepts slug).
+    if (plan.id !== 'pro' && plan.id !== 'premium') return
 
     setCheckoutError(null)
     setCheckoutLoading(true)

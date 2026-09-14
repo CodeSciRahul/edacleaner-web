@@ -87,10 +87,10 @@ export function CheckoutReturnPanel(): React.ReactElement {
         </p>
         <div className="relative mt-8 flex flex-wrap items-center justify-center gap-3">
           <Button asChild variant="glow" size="lg">
-            <a href="/#pricing">{t('checkout.viewPricing')}</a>
+            <Link href="/#pricing">{t('checkout.viewPricing')}</Link>
           </Button>
           <Button asChild variant="outline" size="lg">
-            <a href="/#download">{t('checkout.downloadApp')}</a>
+            <Link href="/#download">{t('checkout.downloadApp')}</Link>
           </Button>
         </div>
       </motion.div>
@@ -238,20 +238,20 @@ export function CheckoutReturnPanel(): React.ReactElement {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-border/60 pt-4 text-xs">
-          <a
+          <Link
             href="/#download"
             className="inline-flex items-center gap-1.5 font-medium text-primary underline-offset-4 hover:underline"
           >
             <Download className="size-3.5" strokeWidth={2} aria-hidden />
             {t('checkout.downloadLink')}
-          </a>
-          <a
+          </Link>
+          <Link
             href="/#pricing"
             className="inline-flex items-center gap-1.5 text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
             <LayoutGrid className="size-3.5" strokeWidth={2} aria-hidden />
             {t('checkout.viewPlans')}
-          </a>
+          </Link>
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
