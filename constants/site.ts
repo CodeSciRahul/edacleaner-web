@@ -15,6 +15,7 @@ export const siteConfig = {
     protocol: 'edacleaner',
     checkoutSuccess: 'edacleaner://checkout/success',
     checkoutCancel: 'edacleaner://checkout/cancel',
+    billingReturn: 'edacleaner://billing/return',
   },
   social: {
     twitter: '',

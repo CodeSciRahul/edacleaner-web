@@ -337,6 +337,10 @@ export const fr: Record<TranslationKey, string> = {
   'checkout.downloadLink': 'Télécharger l’app',
   'checkout.viewPlans': 'Voir les offres',
   'checkout.home': 'Accueil',
+  'checkout.billingEyebrow': 'Facturation mise à jour',
+  'checkout.billingTitle': 'Retour à EDA Cleaner',
+  'checkout.billingBody':
+    'Vos changements de facturation sont enregistrés. Ouvrez l’app bureau pour actualiser votre offre.',
   'mock.nav.overview': 'Aperçu',
   'mock.nav.smartScan': 'Smart Scan',
   'mock.nav.cleanup': 'Nettoyage',

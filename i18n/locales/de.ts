@@ -337,6 +337,10 @@ export const de: Record<TranslationKey, string> = {
   'checkout.downloadLink': 'App herunterladen',
   'checkout.viewPlans': 'Pläne ansehen',
   'checkout.home': 'Startseite',
+  'checkout.billingEyebrow': 'Abrechnung aktualisiert',
+  'checkout.billingTitle': 'Zurück zu EDA Cleaner',
+  'checkout.billingBody':
+    'Ihre Abrechnungsänderungen sind gespeichert. Öffnen Sie die Desktop-App, um Ihren Planstatus zu aktualisieren.',
   'mock.nav.overview': 'Übersicht',
   'mock.nav.smartScan': 'Smart Scan',
   'mock.nav.cleanup': 'Cleanup',
