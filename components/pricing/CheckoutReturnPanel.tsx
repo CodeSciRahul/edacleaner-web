@@ -21,11 +21,14 @@ import { useTranslation } from '@/i18n/useTranslation'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils'
 
-type CheckoutStatus = 'success' | 'cancel' | 'idle'
+type CheckoutStatus = 'success' | 'cancel' | 'idle' | 'billing-return'
 
 const DEEP_LINK_PROTOCOL = 'edacleaner'
 
 function buildDeepLink(status: CheckoutStatus, sessionId: string | null): string {
+  if (status === 'billing-return') {
+    return siteConfig.desktopDeepLink.billingReturn
+  }
   const path = status === 'cancel' ? 'checkout/cancel' : 'checkout/success'
   const url = new URL(`${DEEP_LINK_PROTOCOL}://${path}`)
   if (sessionId) url.searchParams.set('session_id', sessionId)
@@ -37,13 +40,24 @@ export function CheckoutReturnPanel(): React.ReactElement {
   const reducedMotion = useReducedMotion()
   const searchParams = useSearchParams()
   const checkout = searchParams.get('checkout')
+  const billing = searchParams.get('billing')
   const sessionId = searchParams.get('session_id')
 
   const status: CheckoutStatus =
-    checkout === 'success' ? 'success' : checkout === 'cancel' ? 'cancel' : 'idle'
+    billing === 'return'
+      ? 'billing-return'
+      : checkout === 'success'
+        ? 'success'
+        : checkout === 'cancel'
+          ? 'cancel'
+          : 'idle'
 
   const deepLink = useMemo(
-    () => buildDeepLink(status === 'idle' ? 'success' : status, sessionId),
+    () =>
+      buildDeepLink(
+        status === 'idle' ? 'success' : status,
+        sessionId,
+      ),
     [status, sessionId],
   )
 
@@ -56,13 +70,50 @@ export function CheckoutReturnPanel(): React.ReactElement {
   }, [deepLink])
 
   useEffect(() => {
-    if (status !== 'success' || autoTried) return
+    if ((status !== 'success' && status !== 'billing-return') || autoTried) return
     const timer = window.setTimeout(() => {
       setAutoTried(true)
       openDesktopApp()
     }, 900)
     return () => window.clearTimeout(timer)
   }, [status, autoTried, openDesktopApp])
+
+  if (status === 'billing-return') {
+    return (
+      <motion.div
+        initial={reducedMotion ? false : { opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+        className="relative mx-auto max-w-xl overflow-hidden rounded-3xl border border-border/80 bg-gradient-to-b from-elevated to-card p-8 text-center shadow-card sm:p-10"
+      >
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-primary/15 via-transparent to-transparent"
+        />
+        <div className="relative mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl border border-primary/25 bg-primary/10 text-primary shadow-sm">
+          <CheckCircle2 className="size-7" strokeWidth={1.75} />
+        </div>
+        <p className="relative text-xs font-semibold uppercase tracking-wide text-primary">
+          {t('checkout.billingEyebrow')}
+        </p>
+        <h1 className="relative mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+          {t('checkout.billingTitle')}
+        </h1>
+        <p className="relative mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
+          {t('checkout.billingBody')}
+        </p>
+        <div className="relative mt-8 flex flex-col items-center gap-3">
+          <Button size="lg" className="min-w-[200px] gap-2" onClick={openDesktopApp}>
+            <ExternalLink className="size-4" aria-hidden />
+            {t('checkout.openApp')}
+          </Button>
+          <p className="max-w-sm text-xs text-muted-foreground">
+            {launchAttempted ? t('checkout.launchFallbackShort') : t('checkout.launchingShort')}
+          </p>
+        </div>
+      </motion.div>
+    )
+  }
 
   if (status === 'idle') {
     return (

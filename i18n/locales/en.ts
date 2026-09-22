@@ -405,6 +405,10 @@ export const en = {
   'checkout.downloadLink': 'Download the app',
   'checkout.viewPlans': 'View plans',
   'checkout.home': 'Home',
+  'checkout.billingEyebrow': 'Billing updated',
+  'checkout.billingTitle': 'Return to EDA Cleaner',
+  'checkout.billingBody':
+    'Your billing changes are saved. Open the desktop app to refresh your plan status.',
 
   'mock.nav.overview': 'Overview',
   'mock.nav.smartScan': 'Smart Scan',
